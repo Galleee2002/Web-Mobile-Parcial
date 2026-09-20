@@ -9,12 +9,12 @@ Misma idea, otra identidad visual y otras rutas. Options API. `.env` más adelan
 - [x] Cliente Supabase en `src/lib/supabaseClient.js`
 - [x] Paleta en `src/style.css` (`@theme static`: steel-blue, frozen-water, jet-black, iron-grey, soft-cyan)
 - [x] CSS importado en `src/main.js`
+- [x] Layout en `App.vue` (shell propio + `<RouterView />`) — nav + main + footer
+- [x] Páginas placeholder en `src/pages/` equivalentes a Home, Chat, Login, Register
+- [x] Rutas en `src/router/index.js` (`/`, `/sala`, `/acceso`, `/registro`)
 
 ## Falta (alineado al docente)
 
-- [ ] Layout en `App.vue` (shell propio + `<RouterView />`) — el docente usa nav + main + footer
-- [ ] Páginas placeholder en `src/pages/` equivalentes a Home, Chat, Login, Register
-- [ ] Rutas en `src/router/index.js` (hoy: `routes: []`)
 - [ ] Componente de título reutilizable (el docente tiene `BaseH1`)
 - [ ] Chat público: UI + servicio + realtime (`public_chat_messages`)
 - [ ] Auth (login / registro reales)
