@@ -12,6 +12,7 @@ node_modules
 dist
 dist-ssr
 coverage
+.env
 *.local
 
 # Editor directories and files
@@ -40,3 +41,9 @@ __screenshots__/
 
 #Carpetas 
 Clientes-Web-Mobile
+docs/Clientes Web Mobile - Primer Parcial.pdf
+
+# Proyecto del docente
+proyecto-docente/
+proyecto (1).rar
+
