@@ -1,6 +1,10 @@
-# Roadmap — Forge
+# Roadmap — DevChat
 
 Plan y avance del parcial. Contexto, reglas y convenciones de código: `AGENTS.md`.
+
+## Temática
+
+Red social para programadores y desarrolladores web: comparten su trabajo, charlan y se conocen entre ellos. La consigna pide tema libre (excepto política o religión).
 
 ## Consigna (lo que se evalúa)
 
@@ -30,13 +34,13 @@ Rutas con sesión: `meta: { requiresAuth: true, }` y `beforeEach` devuelve `'/ac
 ## Componentes
 
 - `PageTitle.vue`: título de cada página (slot + clase `.page-title`).
-- `PostCard.vue`: una publicación (autor, texto, fecha). Se usa en el feed y en el perfil.
+- `PostCard.vue`: una publicación (autor, texto, fecha). Se usa en el feed y en el perfil. El autor es un `RouterLink` a `/usuarios/:id` con el `user_id` del post: es la forma de llegar al perfil de cada usuario que pide la consigna.
 - `PostForm.vue`: formulario para publicar.
 
 ## Datos
 
 - `profiles`: `id uuid` (PK, FK a `auth.users`), `email text`, `display_name text`, `bio text`, `created_at`.
-- `posts`: `id bigint identity`, `user_id uuid` (FK a `auth.users`), `email text`, `body text`, `created_at`. En `supabase_realtime`. Guarda el `email` del autor, así el feed lo muestra sin consultar otra tabla.
+- `posts`: `id bigint identity`, `user_id uuid` (FK a `auth.users`), `email text`, `body text`, `created_at`. En `supabase_realtime`. Guarda el `email` del autor, así el feed lo muestra sin consultar otra tabla. Decisión: el feed y las publicaciones muestran el email; `display_name` y `bio` solo se ven en el perfil (`/usuarios/:id` y `/cuenta`).
 - Sin RLS, policies ni triggers.
 
 ## Servicios
@@ -56,16 +60,17 @@ Rutas con sesión: `meta: { requiresAuth: true, }` y `beforeEach` devuelve `'/ac
 - [x] CLI de Supabase como devDependency y proyecto vinculado
 - [x] "Confirm email" desactivado en el dashboard
 - [x] Migraciones `profiles` y `posts` con la sintaxis del docente
-- [x] Prettier y `.editorconfig` con el formato del docente (4 espacios, punto y coma)
+- [x] Prettier y `.editorconfig` con el formato del docente (4 espacios, punto y coma), `src/` formateado
+- [x] Migraciones aplicadas en la nube con `db push`
+- [x] Cliente en `src/services/supabase.js` (se borró `src/lib/`)
+- [x] Router en `src/router/router.js` (importado así en `main.js`)
+- [x] `index.html`: `lang="es"`, título DevChat, `h-full` y grilla en `#app`
+- [x] Nombre DevChat (antes Forge) en `index.html`, `App.vue`, `AGENTS.md` y `ROADMAP.md`
+- [x] Temática definida: red social para programadores y desarrolladores web
+- [x] `PageTitle.vue` + clase `.page-title` en `@layer components`, usado en `Home`, `Login` y `Register`
 
 ## Falta
 
-- [ ] Usuario: borrar en la nube las tablas de la versión anterior y volver a aplicar las migraciones
-- [ ] Usuario: `pnpm format` para pasar `src/` al formato nuevo
-- [ ] Mover `src/lib/supabaseClient.js` a `src/services/supabase.js` y borrar `src/lib/`
-- [ ] Renombrar `src/router/index.js` a `src/router/router.js` (e importarlo así en `main.js`)
-- [ ] `index.html`: `lang="es"`, título Forge, `h-full` y grilla en `#app`
-- [ ] `PageTitle.vue` + clase `.page-title` en `@layer components`
 - [ ] `profiles.js` + `auth.js` + `Login.vue` y `Register.vue` reales
 - [ ] `App.vue` con nav según sesión y cerrar sesión
 - [ ] Router: rutas de la tabla + guard; borrar `Chat.vue` y `/sala`

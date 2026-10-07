@@ -1,10 +1,13 @@
 <script>
+import PageTitle from '../components/PageTitle.vue';
+
 export default {
     name: 'Login',
+    components: { PageTitle },
 };
 </script>
 
 <template>
-    <h1>Acceso</h1>
+    <PageTitle>Acceso</PageTitle>
     <p>Ingresá a tu cuenta.</p>
 </template>

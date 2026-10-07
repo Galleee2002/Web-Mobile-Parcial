@@ -1,6 +1,6 @@
-# AGENTS — Forge
+# AGENTS — DevChat
 
-Forge es una red social general para el primer parcial de Clientes Web Mobile (Da Vinci, profesor Santiago Gallino).
+DevChat es una red social para programadores y desarrolladores web, donde comparten su trabajo y charlan entre ellos. Es el primer parcial de Clientes Web Mobile (Da Vinci, profesor Santiago Gallino).
 
 - Consigna: `docs/Clientes Web Mobile - Primer Parcial.pdf`.
 - Plan, modelo de datos y avance: `ROADMAP.md`. Leerlo antes de empezar una tarea y marcar lo que se termine.
@@ -9,7 +9,7 @@ Forge es una red social general para el primer parcial de Clientes Web Mobile (D
 ## Rules
 
 - Del docente se toma **cómo** se escribe: sintaxis, patrones, formato y orden de carpetas. No se usa nada que no esté en `proyecto-docente/` (se ignora solo que él usa Supabase local con Docker).
-- Lo **que** se construye es propio de Forge: nombres de tablas, columnas, servicios, funciones, rutas, páginas, componentes, textos y diseño. No copiar nombres ni pantallas del docente, para que la entrega no parezca una copia.
+- Lo **que** se construye es propio de DevChat: nombres de tablas, columnas, servicios, funciones, rutas, páginas, componentes, textos y diseño. No copiar nombres ni pantallas del docente, para que la entrega no parezca una copia.
 - Si una funcionalidad de la consigna necesita algo que el docente no mostró, se consulta al usuario antes de escribirlo y se marca en el `ROADMAP.md` como "no visto en clase".
 - Sintaxis básica y simple. Es un proyecto académico y estamos aprendiendo: nada de abstracciones, helpers genéricos, patrones avanzados ni trucos de JavaScript.
 - Cada cambio tiene que poder explicarse en un oral: la consigna exige que el alumno entienda y justifique todo el código.
@@ -59,7 +59,7 @@ supabase/
 
 ## Cómo se escribe el código
 
-Patrones del docente, aplicados a lo de Forge:
+Patrones del docente, aplicados a lo de DevChat:
 
 - Formato: 4 espacios, punto y coma, comillas simples (Prettier ya está configurado así). Imports relativos con extensión: `'../services/auth.js'` (no usar el alias `@`).
 - Options API: `name`, `components`, `data()`, `methods`, `mounted`, `unmounted`.

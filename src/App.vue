@@ -6,7 +6,7 @@ export default {
 
 <template>
     <nav class="flex gap-8 items-center h-15 p-4 bg-steel-blue-700 text-white">
-        <RouterLink class="text-xl" to="/">Forge</RouterLink>
+        <RouterLink class="text-xl" to="/">DevChat</RouterLink>
         <ul class="flex gap-4">
             <li>
                 <RouterLink to="/">Inicio</RouterLink>
@@ -26,6 +26,6 @@ export default {
         <RouterView />
     </main>
     <footer class="flex justify-center items-center h-25 bg-jet-black-900 text-white">
-        <p>Forge &copy; 2026</p>
+        <p>DevChat &copy; 2026</p>
     </footer>
 </template>

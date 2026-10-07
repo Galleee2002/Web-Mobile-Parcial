@@ -1,10 +1,13 @@
 <script>
+import PageTitle from '../components/PageTitle.vue';
+
 export default {
     name: 'Home',
+    components: { PageTitle },
 };
 </script>
 
 <template>
-    <h1>Inicio</h1>
+    <PageTitle>Inicio</PageTitle>
     <p>Bienvenida a la red social.</p>
 </template>

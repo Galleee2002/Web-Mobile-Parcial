@@ -61,3 +61,9 @@
     --color-soft-cyan-900: #072c28;
     --color-soft-cyan-950: #051f1c;
 }
+
+@layer components {
+    .page-title {
+        @apply mb-4 text-3xl font-bold text-steel-blue-800;
+    }
+}

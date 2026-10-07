@@ -1,10 +1,13 @@
 <script>
+import PageTitle from '../components/PageTitle.vue';
+
 export default {
     name: 'Register',
+    components: { PageTitle },
 };
 </script>
 
 <template>
-    <h1>Registro</h1>
+    <PageTitle>Registro</PageTitle>
     <p>Creá una cuenta nueva.</p>
 </template>
