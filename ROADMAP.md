@@ -68,16 +68,17 @@ Rutas con sesión: `meta: { requiresAuth: true, }` y `beforeEach` devuelve `'/ac
 - [x] Nombre DevChat (antes Forge) en `index.html`, `App.vue`, `AGENTS.md` y `ROADMAP.md`
 - [x] Temática definida: red social para programadores y desarrolladores web
 - [x] `PageTitle.vue` + clase `.page-title` en `@layer components`, usado en `Home`, `Login` y `Register`
+- [x] `profiles.js` (`getProfileById`, `createProfile`) + `auth.js` (observer, `register`, `login`, `logout`) + `Login.vue` y `Register.vue` reales. `register` crea el perfil después del `signUp` (era un TODO del docente). En `onAuthStateChange` se agrega `if (profile !== undefined)` porque justo después del registro el perfil todavía no existe
 
 ## Falta
 
-- [ ] `profiles.js` + `auth.js` + `Login.vue` y `Register.vue` reales
 - [ ] `App.vue` con nav según sesión y cerrar sesión
 - [ ] Router: rutas de la tabla + guard; borrar `Chat.vue` y `/sala`
 - [ ] `posts.js` + `PostCard.vue` + feed en `Home.vue` con realtime
 - [ ] `PostForm.vue` + `NewPost.vue`
 - [ ] `UserProfile.vue` (ruta con parámetro, no visto en clase)
-- [ ] `Account.vue` (ver y editar nombre y bio)
+- [ ] `Account.vue` (ver y editar nombre y bio). Acá se crean `updateProfile` en `profiles.js` y `updateAuthProfile` en `auth.js`: `.update()` de Supabase es **no visto en clase**
+- [ ] Mostrar errores en `Login.vue` y `Register.vue` (**no visto en clase**: el docente deja el `catch` vacío; por ahora solo se hace `console.error`)
 - [ ] Pasada de accesibilidad, responsive y JSDoc
 
 ## Entrega
