@@ -35,7 +35,7 @@ export default {
 </script>
 
 <template>
-    <PageTitle>Acceso</PageTitle>
+    <PageTitle>Ingresar</PageTitle>
 
     <form action="#" @submit.prevent="handleSubmit">
         <div class="mb-3">
@@ -63,4 +63,9 @@ export default {
             Entrar
         </button>
     </form>
+
+    <p class="mt-4">
+        ¿No tenés cuenta?
+        <RouterLink to="/registro" class="text-steel-blue-700 underline">Registrate</RouterLink>
+    </p>
 </template>

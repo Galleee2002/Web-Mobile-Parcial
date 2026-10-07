@@ -29,6 +29,8 @@ Red social para programadores y desarrolladores web: comparten su trabajo, charl
 
 Rutas con sesión: `meta: { requiresAuth: true, }` y `beforeEach` devuelve `'/acceso'`.
 
+`/acceso` y `/registro` siguen siendo dos páginas (una hace `login`, la otra `register`), pero el nav sin sesión muestra solo "Ingresar". Al registro se llega con el link "¿No tenés cuenta? Registrate" de `Login.vue`, y `Register.vue` tiene "¿Ya tenés cuenta? Ingresá". La URL queda `/acceso` y no `/ingresar` porque esa es la ruta del docente.
+
 `/usuarios/:id` es una ruta con parámetro (`this.$route.params.id`): **no visto en clase**, pero la consigna lo necesita para ver el perfil de cada usuario.
 
 ## Componentes
@@ -69,6 +71,7 @@ Rutas con sesión: `meta: { requiresAuth: true, }` y `beforeEach` devuelve `'/ac
 - [x] Temática definida: red social para programadores y desarrolladores web
 - [x] `PageTitle.vue` + clase `.page-title` en `@layer components`, usado en `Home`, `Login` y `Register`
 - [x] `profiles.js` (`getProfileById`, `createProfile`) + `auth.js` (observer, `register`, `login`, `logout`) + `Login.vue` y `Register.vue` reales. `register` crea el perfil después del `signUp` (era un TODO del docente). En `onAuthStateChange` se agrega `if (profile !== undefined)` porque justo después del registro el perfil todavía no existe
+- [x] Nav sin sesión con un solo link "Ingresar"; `Login.vue` y `Register.vue` enlazados entre sí con `RouterLink`
 
 ## Falta
 

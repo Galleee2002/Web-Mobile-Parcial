@@ -70,6 +70,6 @@ Patrones del docente, aplicados a lo de DevChat:
 - Nombres de columnas y de datos en snake_case como en la base (`display_name`, `user_id`, `created_at`).
 - Auth con patrón observer: `userData` + `observers`, `onAuthStateChange` carga el perfil y llama a `notifyAll()`. Los componentes usan `subscribeToAuthChanges(callback)`.
 - Guard del router: el router se suscribe a `subscribeToAuthChanges`, guarda el `user` y en `beforeEach` devuelve `'/acceso'` si la ruta tiene `meta.requiresAuth` y `user.id === null`.
-- Nav según sesión: `<template v-if="user.id === null">` con acceso y registro; `v-else` con publicar, cuenta y el form de cerrar sesión.
+- Nav según sesión: `<template v-if="user.id === null">` con un solo link "Ingresar" (`/acceso`); `v-else` con publicar, cuenta y el form de cerrar sesión. Al registro se llega desde el link "¿No tenés cuenta? Registrate" de `Login.vue`, y `Register.vue` tiene el link inverso a `/acceso`.
 - Realtime con canal: `supabase.channel()`, `.on('postgres_changes', { event: 'INSERT', ... })`, `.subscribe()`, y la función devuelve otra que hace `unsubscribe()`. La página la guarda y la llama en `unmounted`.
 - Migraciones SQL: `CREATE TABLE` y `ALTER PUBLICATION ... ADD TABLE` en mayúscula, columnas en minúscula, 4 espacios, `id bigint primary key generated always as identity`, `references auth.users (id)`, `created_at timestamptz default now()`. Sin RLS, policies, triggers ni funciones.

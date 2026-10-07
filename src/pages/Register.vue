@@ -63,4 +63,9 @@ export default {
             Registrarme
         </button>
     </form>
+
+    <p class="mt-4">
+        ¿Ya tenés cuenta?
+        <RouterLink to="/acceso" class="text-steel-blue-700 underline">Ingresá</RouterLink>
+    </p>
 </template>

@@ -15,10 +15,7 @@ export default {
                 <RouterLink to="/sala">Sala</RouterLink>
             </li>
             <li>
-                <RouterLink to="/acceso">Acceso</RouterLink>
-            </li>
-            <li>
-                <RouterLink to="/registro">Registro</RouterLink>
+                <RouterLink to="/acceso">Ingresar</RouterLink>
             </li>
         </ul>
     </nav>
