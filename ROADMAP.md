@@ -1,77 +1,50 @@
 # Roadmap — Forge
 
-Red social general para el primer parcial de Clientes Web Mobile.
-Consigna: `docs/Clientes Web Mobile - Primer Parcial.pdf`. Referencia: `proyecto-docente/`.
+Plan y avance del parcial. Contexto, reglas y convenciones de código: `AGENTS.md`.
 
 ## Consigna (lo que se evalúa)
 
-- SPA con Vite, Vue SFC, Tailwind y Supabase (Postgres, Realtime, Auth). Supabase local.
+- SPA con Vite, Vue SFC, Tailwind y Supabase (Postgres, Realtime, Auth). Supabase en la nube.
 - Registro e ingreso de usuarios.
 - Feed con las publicaciones de todos los usuarios.
 - Crear publicaciones.
 - Perfil de cada usuario con sus publicaciones.
-- Perfil propio: editar nombre y contraseña.
+- Perfil propio: administrar sus datos (la consigna dice "ej: nombre o password"; se edita nombre y bio).
 - HTML semántico, accesibilidad, usabilidad, JSDoc, nombres coherentes, archivos prolijos.
-
-## Cómo se escribe el código
-
-Tomado del docente sin copiarlo:
-
-- Options API: `name`, `components`, `data()`, `methods`, `mounted`, `unmounted`.
-- Sin comentarios explicativos de clase. JSDoc solo en funciones exportadas de `services/`.
-- Las páginas no importan Supabase: llaman funciones de `src/services/`.
-- Servicios: `const { data, error } = await supabase...`, y si hay error `throw new Error(error.message)`.
-- Formularios: `<form action="#" @submit.prevent="...">`, `label for` + `id`, `v-model` sobre un objeto de `data()`.
-- Estado `loading` y mensaje de error visibles en cada pantalla (el docente los deja en TODO).
-- Nav según sesión: `user.id === null` muestra acceso/registro; si no, publicar/cuenta/salir.
-- Realtime como el chat del docente, aplicado a `posts`: canal, `postgres_changes` con `INSERT`, la función devuelve el unsubscribe y la página lo llama en `unmounted`.
-- Auth con patrón observer: `subscribeToAuthChanges(callback)` notifica al suscribirse y en cada cambio.
-- Estilo de este repo (Prettier): 2 espacios, comillas simples, sin punto y coma.
-
-Lo propio de Forge: nombre, paleta de `src/style.css`, rutas, tablas y componentes.
-
-## Carpetas
-
-```
-src/
-  main.js
-  App.vue              shell nav / main / footer + estado de sesión
-  style.css            paleta @theme + clases en @layer components
-  router/index.js      rutas + guard de sesión
-  services/            supabase.js, auth.js, posts.js, profiles.js
-  components/          piezas reutilizables (título, tarjeta de post, form de post)
-  pages/               una vista por ruta
-supabase/
-  migrations/          tablas, RLS, trigger, realtime
-  seed.sql             usuarios y posts de ejemplo
-```
 
 ## Rutas
 
 | Ruta | Página | Sesión |
 |---|---|---|
 | `/` | `Home.vue` feed | no |
-| `/publicar` | `NewPost.vue` | sí |
-| `/usuarios/:id` | `UserProfile.vue` | no |
-| `/cuenta` | `Account.vue` | sí |
 | `/acceso` | `Login.vue` | no |
 | `/registro` | `Register.vue` | no |
+| `/publicar` | `NewPost.vue` | sí |
+| `/cuenta` | `Account.vue` | sí |
+| `/usuarios/:id` | `UserProfile.vue` | no |
 
-Rutas con sesión: `meta: { requiresAuth: true }` y `beforeEach` redirige a `/acceso`.
+Rutas con sesión: `meta: { requiresAuth: true, }` y `beforeEach` devuelve `'/acceso'`.
+
+`/usuarios/:id` es una ruta con parámetro (`this.$route.params.id`): **no visto en clase**, pero la consigna lo necesita para ver el perfil de cada usuario.
+
+## Componentes
+
+- `PageTitle.vue`: título de cada página (slot + clase `.page-title`).
+- `PostCard.vue`: una publicación (autor, texto, fecha). Se usa en el feed y en el perfil.
+- `PostForm.vue`: formulario para publicar.
 
 ## Datos
 
-- `profiles`: `id uuid` (PK, FK a `auth.users`), `display_name text`, `created_at`, `updated_at`. Se crea con trigger al registrarse.
-- `posts`: `id bigint identity`, `author_id uuid` (FK a `profiles.id`), `body text`, `created_at`. En `supabase_realtime`.
-- RLS: lectura pública en ambas; insert de `posts` y update de `profiles` solo si `auth.uid()` es el dueño.
-- El feed trae el nombre con `select('*, profiles(display_name)')`.
+- `profiles`: `id uuid` (PK, FK a `auth.users`), `email text`, `display_name text`, `bio text`, `created_at`.
+- `posts`: `id bigint identity`, `user_id uuid` (FK a `auth.users`), `email text`, `body text`, `created_at`. En `supabase_realtime`. Guarda el `email` del autor, así el feed lo muestra sin consultar otra tabla.
+- Sin RLS, policies ni triggers.
 
 ## Servicios
 
 - `supabase.js`: `createClient` con `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY` del `.env`.
-- `auth.js`: `register({ email, password, displayName })`, `login({ email, password })`, `logout()`, `subscribeToAuthChanges(callback)` con `{ id, email, displayName }`.
-- `posts.js`: `getPosts()`, `getPostsByAuthor(authorId)`, `createPost({ authorId, body })`, `subscribeToNewPosts(callback)`.
-- `profiles.js`: `getProfile(id)`, `updateDisplayName(id, displayName)`, `updatePassword(password)` vía `supabase.auth.updateUser`.
+- `profiles.js`: `getProfileById(id)`, `createProfile({ id, email })`, `updateProfile(id, { display_name, bio })`.
+- `auth.js`: `register({ email, password })` (después del `signUp` llama a `createProfile`), `login({ email, password })`, `logout()`, `updateAuthProfile({ display_name, bio })` (actualiza, cambia `userData` y llama a `notifyAll()`), `subscribeToAuthChanges(callback)` con `{ id, email, display_name, bio }`.
+- `posts.js`: `getAllPosts()`, `getPostsByUser(userId)`, `createPost({ user_id, email, body })`, `subscribeToNewPosts(callback)`.
 
 ## Hecho
 
@@ -79,23 +52,29 @@ Rutas con sesión: `meta: { requiresAuth: true }` y `beforeEach` redirige a `/ac
 - [x] Paleta en `src/style.css` (steel-blue, frozen-water, jet-black, iron-grey, soft-cyan)
 - [x] Shell en `App.vue` (nav + main + footer)
 - [x] Placeholders `Home`, `Login`, `Register`
-- [x] `.env` con las variables de Supabase
+- [x] `.env` con las variables de Supabase (proyecto en la nube)
+- [x] CLI de Supabase como devDependency y proyecto vinculado
+- [x] "Confirm email" desactivado en el dashboard
+- [x] Migraciones `profiles` y `posts` con la sintaxis del docente
+- [x] Prettier y `.editorconfig` con el formato del docente (4 espacios, punto y coma)
 
 ## Falta
 
-- [ ] `supabase init` + migración (`profiles`, `posts`, RLS, trigger, realtime) + `seed.sql`
-- [ ] Mover `src/lib/supabaseClient.js` a `src/services/supabase.js`
-- [ ] `index.html`: `lang="es"`, título Forge, grilla de alto completo
-- [ ] Componente de título con slot + clase en `@layer components`
-- [ ] `auth.js` + `Login.vue` y `Register.vue` reales
+- [ ] Usuario: borrar en la nube las tablas de la versión anterior y volver a aplicar las migraciones
+- [ ] Usuario: `pnpm format` para pasar `src/` al formato nuevo
+- [ ] Mover `src/lib/supabaseClient.js` a `src/services/supabase.js` y borrar `src/lib/`
+- [ ] Renombrar `src/router/index.js` a `src/router/router.js` (e importarlo así en `main.js`)
+- [ ] `index.html`: `lang="es"`, título Forge, `h-full` y grilla en `#app`
+- [ ] `PageTitle.vue` + clase `.page-title` en `@layer components`
+- [ ] `profiles.js` + `auth.js` + `Login.vue` y `Register.vue` reales
 - [ ] `App.vue` con nav según sesión y cerrar sesión
 - [ ] Router: rutas de la tabla + guard; borrar `Chat.vue` y `/sala`
-- [ ] `posts.js` + feed en `Home.vue` con realtime
-- [ ] `NewPost.vue`
-- [ ] `profiles.js` + `UserProfile.vue`
-- [ ] `Account.vue` (nombre y contraseña)
+- [ ] `posts.js` + `PostCard.vue` + feed en `Home.vue` con realtime
+- [ ] `PostForm.vue` + `NewPost.vue`
+- [ ] `UserProfile.vue` (ruta con parámetro, no visto en clase)
+- [ ] `Account.vue` (ver y editar nombre y bio)
 - [ ] Pasada de accesibilidad, responsive y JSDoc
 
 ## Entrega
 
-Zip/rar `apellido-nombre` con el proyecto completo, el deploy local de Supabase y `datos.txt` (carrera, materia, cuatrimestre, año, turno, comisión, apellido y nombre, docente, 1er parcial).
+Zip/rar `apellido-nombre` con el proyecto completo (incluida `supabase/migrations/`) y `datos.txt` (carrera, materia, cuatrimestre, año, turno, comisión, apellido y nombre, docente, 1er parcial). Como se usa la nube no va el deploy local, pero el proyecto de Supabase no puede estar pausado al momento de la corrección.

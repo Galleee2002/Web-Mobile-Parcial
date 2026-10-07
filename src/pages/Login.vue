@@ -1,10 +1,10 @@
 <script>
 export default {
-  name: 'Login',
-}
+    name: 'Login',
+};
 </script>
 
 <template>
-  <h1>Acceso</h1>
-  <p>Ingresá a tu cuenta.</p>
+    <h1>Acceso</h1>
+    <p>Ingresá a tu cuenta.</p>
 </template>

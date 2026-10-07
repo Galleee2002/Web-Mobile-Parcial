@@ -43,7 +43,12 @@ __screenshots__/
 Clientes-Web-Mobile
 docs/Clientes Web Mobile - Primer Parcial.pdf
 
+# Supabase CLI
+supabase/.temp/
+supabase/.branches/
+
 # Proyecto del docente
 proyecto-docente/
 proyecto (1).rar
+proyecto.rar
 
