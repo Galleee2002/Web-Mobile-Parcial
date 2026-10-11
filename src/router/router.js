@@ -1,19 +1,39 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { subscribeToAuthChanges } from '../services/auth.js';
 import Home from '../pages/Home.vue';
-import Chat from '../pages/Chat.vue';
 import Login from '../pages/Login.vue';
 import Register from '../pages/Register.vue';
+import NewPost from '../pages/NewPost.vue';
+import Account from '../pages/Account.vue';
+import EditAccount from '../pages/EditAccount.vue';
+import UserProfile from '../pages/UserProfile.vue';
 
 const routes = [
     { path: '/', component: Home },
-    { path: '/sala', component: Chat },
     { path: '/acceso', component: Login },
     { path: '/registro', component: Register },
+    { path: '/publicar', component: NewPost, meta: { requiresAuth: true } },
+    { path: '/cuenta', component: Account, meta: { requiresAuth: true } },
+    { path: '/cuenta/editar', component: EditAccount, meta: { requiresAuth: true } },
+    { path: '/usuarios/:id', component: UserProfile },
 ];
 
 const router = createRouter({
     routes,
     history: createWebHistory(),
+});
+
+// Datos del usuario autenticado, para saber si puede entrar a las rutas con sesión.
+let user = {
+    id: null,
+    email: null,
+};
+subscribeToAuthChanges((newUserData) => (user = newUserData));
+
+router.beforeEach((to, from) => {
+    if (to.meta?.requiresAuth && user.id === null) {
+        return '/acceso';
+    }
 });
 
 export default router;
