@@ -50,6 +50,7 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 - `profiles`: `id uuid` (PK, FK a `auth.users`), `email text`, `display_name text`, `bio text`, `created_at`.
 - `posts`: `id bigint identity`, `user_id uuid` (FK a `auth.users`), `email text`, `body text`, `created_at`. En `supabase_realtime`. Guarda el `email` del autor, así el feed lo muestra sin consultar otra tabla. Decisión: el feed y las publicaciones muestran el email; `display_name` y `bio` solo se ven en el perfil (`/usuarios/:id` y `/cuenta`).
 - Sin RLS, policies ni triggers.
+- Permisos: `20261011204000_grant_profiles_and_posts.sql` da `SELECT`, `INSERT` y `UPDATE` sobre `profiles`, y `SELECT` e `INSERT` sobre `posts`, a `anon` y `authenticated`. **No visto en clase**: desde mayo de 2026 Supabase en la nube no da esos permisos solo a las tablas nuevas. El deploy local del docente sí los da (`auto_expose_new_tables` en su `config.toml`), por eso sus migraciones no tienen `GRANT`. `posts` no lleva `UPDATE` ni `DELETE` porque las publicaciones no se editan ni se borran. `anon` va en las dos porque el feed y el perfil de otro usuario son públicos.
 
 ## Servicios
 
@@ -84,7 +85,8 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 
 ## Falta
 
-- [ ] Permisos de las tablas en la nube: al registrarse, Supabase responde `permission denied for table profiles`. Hay que resolverlo antes del feed (ver nota abajo)
+- [x] Migración `20261011204000_grant_profiles_and_posts.sql` creada (ver Datos)
+- [ ] Aplicar la migración de permisos con `pnpm exec supabase db push` y volver a correr la consulta de `information_schema.role_table_grants`: tienen que aparecer `SELECT`, `INSERT` y `UPDATE`. Después, probar un registro nuevo y ver que se guarda la fila en `profiles`. Va antes del feed
 - [ ] `posts.js` + `PostCard.vue` + feed en `Home.vue` con realtime. El `let` de `unsubscribe` va afuera del componente
 - [ ] `NewPost.vue` con el formulario en la página
 - [ ] `UserProfile.vue`: `this.$route.params.id`, `getProfileById` y `getPostsByUser`. Sin `requiresAuth`
@@ -94,7 +96,8 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 
 Notas de la prueba en el navegador:
 
-- `permission denied` es un error de permisos de Postgres (GRANT): los roles `anon` y `authenticated` no pueden leer ni escribir `profiles`. No es RLS, que da otro mensaje. El `signUp` sí crea el usuario en Auth, pero el perfil no se guarda.
+- `permission denied` es un error de permisos de Postgres (GRANT): los roles `anon` y `authenticated` no podían leer ni escribir `profiles`. No es RLS, que da otro mensaje. El `signUp` creó el usuario en Auth, pero el perfil no se guardó. La consulta a `information_schema.role_table_grants` mostró solo `TRUNCATE`, `TRIGGER` y `REFERENCES` en las dos tablas. Lo resuelve la migración de permisos.
+- Quedó la cuenta de prueba `prueba.agente@devchat.dev` en Auth, sin fila en `profiles`. Se puede borrar desde el dashboard.
 - Si recargás el navegador en una ruta con sesión (por ejemplo `/cuenta`), te lleva a `/acceso`: el guard corre antes de que Supabase avise que hay sesión. El proyecto del docente hace lo mismo.
 - ESLint marca `vue/multi-word-component-names` en `Home`, `Login`, `Register` y `Account`. Son los nombres de una palabra que usa el docente.
 

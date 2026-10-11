@@ -45,7 +45,8 @@ El docente y esta entrega no hacen lo mismo. Esto queda así a propósito:
 
 El esquema vive en `supabase/migrations/` y se aplica al proyecto en la nube con la CLI (devDependency `supabase`). Ninguno de estos comandos usa Docker.
 
-- Nueva migración: crear el `.sql` a mano con el formato `AAAAMMDDHHMMSS_create_<tabla>_table.sql`.
+- Nueva migración: crear el `.sql` a mano con el formato `AAAAMMDDHHMMSS_create_<tabla>_table.sql`. Si no crea una tabla, el nombre dice lo que hace (`AAAAMMDDHHMMSS_grant_profiles_and_posts.sql`).
+- Supabase en la nube no da permisos a las tablas nuevas de `public` (cambio de 2026). Cada tabla nueva necesita su `GRANT` a `anon` y `authenticated`, solo con las operaciones que usa la app.
 - Aplicar migraciones pendientes: `pnpm exec supabase db push`.
 - Una migración ya aplicada no se edita: los cambios van en una migración nueva.
 - Datos de ejemplo: se cargan registrando usuarios y publicando desde la app (no hay `seed.sql`, porque en la nube no se corre `db reset`).
