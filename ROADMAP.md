@@ -87,9 +87,9 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 
 - [x] Migración `20261011204000_grant_profiles_and_posts.sql` creada (ver Datos)
 - [x] Aplicar la migración de permisos con `pnpm exec supabase db push` y volver a correr la consulta de `information_schema.role_table_grants`: tienen que aparecer `SELECT`, `INSERT` y `UPDATE`. Después, probar un registro nuevo y ver que se guarda la fila en `profiles`. Va antes del feed
-- [x] `posts.js` + `PostCard.vue` + feed en `Home.vue` con realtime. El `let` de `unsubscribe` va afuera del componente. `posts.js` tiene por ahora solo `getAllPosts` y `subscribeToNewPosts`; el prop de `PostCard` lleva `type`, `required` y `default: null`, como `LoadingContext`
-- [ ] `NewPost.vue` con el formulario en la página. Ahí se crea `createPost` en `posts.js`
-- [ ] `UserProfile.vue`: `this.$route.params.id`, `getProfileById` y `getPostsByUser`. Sin `requiresAuth`
+- [x] `posts.js` + `PostCard.vue` + feed en `Home.vue` con realtime. El `let` de `unsubscribe` va afuera del componente. El feed usa `getAllPosts` y `subscribeToNewPosts`; el prop de `PostCard` lleva `type`, `required` y `default: null`, como `LoadingContext`
+- [x] `NewPost.vue` con el formulario en la página. Ahí se crea `createPost` en `posts.js`. Al publicar, `this.$router.push('/')`. El `textarea` lleva el atributo `required` (**no visto en clase**: el docente no valida formularios). El botón no se deshabilita mientras guarda, como en el docente
+- [x] `UserProfile.vue`: `this.$route.params.id`, `getProfileById` y `getPostsByUser`. Sin `requiresAuth` ni realtime
 - [ ] `Account.vue` (ver) y `EditAccount.vue` (editar `display_name` y `bio`). Ahí se crean `updateProfile` y `updateAuthProfile`. `.update()` ya está visto
 - [ ] Mostrar errores en `Login.vue` y `Register.vue` (**no visto en clase**: el docente deja el `catch` vacío; por ahora solo se hace `console.error`)
 - [ ] Pasada de accesibilidad, responsive y JSDoc. El nav con sesión (email + "Cerrar sesión") ya ocupa todo el ancho cerca de 545px: en celular hay que acomodarlo
@@ -97,9 +97,9 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 Notas de la prueba en el navegador:
 
 - `permission denied` es un error de permisos de Postgres (GRANT): los roles `anon` y `authenticated` no podían leer ni escribir `profiles`. No es RLS, que da otro mensaje. El `signUp` creó el usuario en Auth, pero el perfil no se guardó. La consulta a `information_schema.role_table_grants` mostró solo `TRUNCATE`, `TRIGGER` y `REFERENCES` en las dos tablas. Lo resuelve la migración de permisos.
-- Quedó la cuenta de prueba `prueba.agente@devchat.dev` en Auth, sin fila en `profiles`. Se puede borrar desde el dashboard.
+- Quedó la cuenta de prueba `prueba.agente@devchat.dev` en Auth, sin fila en `profiles`. Se borra desde el dashboard: `UserProfile.vue` no contempla un perfil que no existe (el docente tampoco).
 - Si recargás el navegador en una ruta con sesión (por ejemplo `/cuenta`), te lleva a `/acceso`: el guard corre antes de que Supabase avise que hay sesión. El proyecto del docente hace lo mismo.
-- ESLint marca `vue/multi-word-component-names` en `Home`, `Login`, `Register` y `Account`. Son los nombres de una palabra que usa el docente.
+- ESLint marca `vue/multi-word-component-names` en `Home`, `Login`, `Register` y `Account`. Son los nombres de una palabra que usa el docente. También marca `vue/valid-v-for` en `Home.vue` y `UserProfile.vue`, porque el `v-for` con `PostCard` no lleva `:key` (como el docente).
 
 ## Consigna, página por página
 
