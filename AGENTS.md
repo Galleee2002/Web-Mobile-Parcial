@@ -13,6 +13,7 @@ DevChat es una red social para programadores y desarrolladores web, donde compar
 - Si una funcionalidad de la consigna necesita algo que el docente no mostró, se consulta al usuario antes de escribirlo y se marca en el `ROADMAP.md` como "no visto en clase".
 - Sintaxis básica y simple. Es un proyecto académico y estamos aprendiendo: nada de abstracciones, helpers genéricos, patrones avanzados ni trucos de JavaScript.
 - Cada cambio tiene que poder explicarse en un oral: la consigna exige que el alumno entienda y justifique todo el código.
+- El código no lleva comentarios (`//`, `/* */`, `<!-- -->`), solo JSDoc. El docente comenta mucho porque su proyecto es material de clase; las explicaciones de DevChat van en `ROADMAP.md` y `AGENTS.md`.
 - No correr `pnpm dev` ni `pnpm build` de forma constante. Solo cuando haga falta verificar algo puntual, y avisando.
 - Nunca hacer `git commit` ni `git push`. Eso lo hace únicamente el usuario.
 - No correr comandos de Supabase (`link`, `db push`, etc.). El agente crea los archivos y le pasa al usuario los comandos para que los corra él.
@@ -27,9 +28,10 @@ El docente y esta entrega no hacen lo mismo. Esto queda así a propósito:
 - Nombres propios: tablas `profiles` y `posts`, rutas `/acceso`, `/registro`, `/publicar`, `/cuenta`, `/cuenta/editar` y `/usuarios/:id`, componentes `PageTitle` y `PostCard`. El perfil tiene `display_name` y `bio`. No se agrega la columna `career` del docente.
 - Supabase en la nube, con `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`. No se copia la URL local de `supabase.js` ni `supabase/seed.sql`. Ese seed crea usuarios con una función plpgsql para el deploy local con Docker.
 - Nav sin sesión: un solo link "Ingresar". El docente muestra también "Crear cuenta".
+- El nav va dentro de un `<header>` y en celular es un menú hamburguesa (no visto en clase, decidido con el usuario). El docente tiene un `<nav>` suelto de una sola fila, que con sesión no entra en un celular.
 - El feed (`/`) y el perfil de otro usuario no piden sesión, porque la consigna pide ver las publicaciones de todos y entrar al perfil de cada uno. En el docente, el chat y `/usuario/:id` tienen `requiresAuth`.
 - No se copian `delay()`, `BaseLoader` ni `LoadingContext`. `delay()` solo frena la carga para mostrar el loader en clase. La carga se escribe como en el chat: `v-if="!loading"` y un `v-else` con el texto "Cargando...".
-- El `catch` de login, registro y del feed (`Home.vue`) hace `console.error`. El del docente está vacío (`// TODO...`). Login, registro y editar cuenta además muestran el error en la página (no visto en clase, decidido con el usuario): `errorMessage: null` en `data()`, un texto fijo en castellano en el `catch` y `<p v-if="errorMessage !== null" role="alert">`. Editar cuenta también muestra "Cambios guardados." con `successMessage`.
+- El `catch` de login, registro y del feed (`Home.vue`) hace `console.error`. El del docente está vacío (`// TODO...`). Login, registro, publicar y editar cuenta además muestran el error en la página (no visto en clase, decidido con el usuario): `errorMessage: null` en `data()`, un texto fijo en castellano en el `catch` y `<p v-if="errorMessage !== null" role="alert">`. Editar cuenta también muestra "Cambios guardados." con `successMessage`.
 - Los servicios no llevan los `console.log` del docente (por ejemplo, el del payload en la suscripción realtime): solo `console.error` cuando hay error.
 - En `onAuthStateChange`, si `getProfileById` no devuelve perfil, no se leen sus campos. Justo después del registro el perfil todavía no existe. El docente no tiene ese `if`.
 - El formulario de publicar queda en `NewPost.vue`, como el formulario del chat queda en la página. `PostCard.vue` sí es un componente: el docente muestra el mensaje solo en el chat, y acá el mismo bloque va en el feed y en el perfil. La raíz de `PostCard` es un `<li>`, adentro de un `<ol>`.
@@ -62,7 +64,7 @@ Mismo orden que `proyecto-docente/`, con archivos propios:
 index.html             lang="es", h-full y grilla en #app
 src/
   main.js
-  App.vue              nav / main / footer + estado de sesión
+  App.vue              header (nav) / main / footer + estado de sesión y del menú
   style.css            @import tailwindcss + paleta @theme + clases en @layer components
   router/router.js     rutas + guard de sesión
   services/            supabase.js, auth.js, profiles.js, posts.js
@@ -92,6 +94,9 @@ Patrones del docente, aplicados a lo de DevChat:
 - El `v-for` del listado no lleva `:key`. Va en un `<li>` adentro de un `<ol>`.
 - Guard del router: el router se suscribe a `subscribeToAuthChanges`, guarda el `user` y en `beforeEach` hace `if (to.meta?.requiresAuth && user.id === null) return '/acceso'`.
 - Nav según sesión: `<template v-if="user.id === null">` con un solo link "Ingresar" (`/acceso`); `v-else` con publicar, cuenta y el form de cerrar sesión. Cerrar sesión llama a `logout()` y después `this.$router.push('/acceso')`. Al registro se llega desde el link "¿No tenés cuenta? Registrate" de `Login.vue`, y `Register.vue` tiene el link inverso a `/acceso`. Editar la cuenta no va en el nav: se entra desde `/cuenta`.
+- Menú en celular: `menuOpen: false` en `data()` de `App.vue`, `toggleMenu()` y `closeMenu()` en `methods`. Botón `type="button"` con texto "Menú", `class="md:hidden"`, `aria-controls="main-menu"`, `:aria-expanded="menuOpen"` y `@click="toggleMenu"`. La `ul id="main-menu"` lleva `:class="menuOpen ? 'flex' : 'hidden'"` y `md:flex`. Cada `RouterLink` del nav lleva `@click="closeMenu"`, y `handleLogout` también lo llama. La grilla de `index.html` es `grid-rows-[auto_1fr_100px]` para que el nav crezca al abrir el menú.
+- Listados: si no hay publicaciones, `<p v-if="posts.length === 0">` con un texto, y el `<ol v-else>`.
+- Inputs: borde `border-iron-grey-600` (el 400 no llega al contraste 3:1). `Login` y `Register` llevan `required` y `autocomplete` (`email`, `current-password`, `new-password`). Textos largos sin espacios (emails, URLs): `wrap-break-word`.
 - Realtime con canal: `supabase.channel()`, `.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posts' })`, `.subscribe()`, y la función devuelve otra que hace `unsubscribe()`. La página la guarda en un `let` afuera del `export default` (`let unsubscribeFromPosts = () => {}`), lo asigna en `mounted` y lo llama en `unmounted`. No va en `data()`.
 - Carga de un listado: `loading: true` en `data()`, el fetch en `try`, `this.loading = false` en el `finally`, y la suscripción realtime después del try/catch, como en el chat. Como el listado va del más nuevo al más viejo, la publicación que llega por realtime se agrega adelante con `unshift`. El docente usa `push` porque su chat va del más viejo al más nuevo.
 - Migraciones SQL: `CREATE TABLE` y `ALTER PUBLICATION ... ADD TABLE` en mayúscula, columnas en minúscula, 4 espacios, `id bigint primary key generated always as identity`, `references auth.users (id)`, `created_at timestamptz default now()`. Sin RLS, policies, triggers ni funciones. El docente escribe `create table` en minúscula en el chat; las de DevChat siguen en mayúscula, como su tabla de perfiles.

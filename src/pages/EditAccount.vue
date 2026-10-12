@@ -57,7 +57,7 @@ export default {
             <input
                 type="text"
                 id="display_name"
-                class="w-full p-2 border border-iron-grey-400 rounded"
+                class="w-full p-2 border border-iron-grey-600 rounded"
                 v-model="profile.display_name"
             />
         </div>
@@ -65,7 +65,7 @@ export default {
             <label for="bio" class="block mb-2">Bio</label>
             <textarea
                 id="bio"
-                class="w-full p-2 border border-iron-grey-400 rounded"
+                class="w-full p-2 border border-iron-grey-600 rounded"
                 v-model="profile.bio"
             ></textarea>
         </div>

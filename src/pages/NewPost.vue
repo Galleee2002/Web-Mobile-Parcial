@@ -16,12 +16,14 @@ export default {
                 email: null,
             },
             loading: false,
+            errorMessage: null,
         };
     },
     methods: {
         async handleSubmit() {
             try {
                 this.loading = true;
+                this.errorMessage = null;
 
                 await createPost({
                     user_id: this.user.id,
@@ -32,6 +34,7 @@ export default {
                 this.$router.push('/');
             } catch (error) {
                 console.error('[NewPost.vue handleSubmit] No se pudo publicar: ', error);
+                this.errorMessage = 'No se pudo publicar. Probá de nuevo.';
             } finally {
                 this.loading = false;
             }
@@ -51,11 +54,18 @@ export default {
             <label for="body" class="block mb-2">¿En qué estás trabajando?</label>
             <textarea
                 id="body"
-                class="w-full p-2 border border-iron-grey-400 rounded"
+                class="w-full p-2 border border-iron-grey-600 rounded"
                 v-model="newPost.body"
                 required
             ></textarea>
         </div>
+        <p
+            v-if="errorMessage !== null"
+            role="alert"
+            class="mb-3 p-2 rounded bg-red-50 text-red-700"
+        >
+            {{ errorMessage }}
+        </p>
         <button
             type="submit"
             class="transition px-4 py-2 rounded bg-steel-blue-700 text-white hover:bg-steel-blue-600 focus:bg-steel-blue-600 active:bg-steel-blue-800"

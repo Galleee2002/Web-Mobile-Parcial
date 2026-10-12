@@ -23,7 +23,6 @@ const router = createRouter({
     history: createWebHistory(),
 });
 
-// Datos del usuario autenticado, para saber si puede entrar a las rutas con sesión.
 let user = {
     id: null,
     email: null,

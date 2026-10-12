@@ -1,7 +1,6 @@
 import { supabase } from './supabase.js';
 import { createProfile, getProfileById, updateProfile } from './profiles.js';
 
-// Datos del usuario autenticado (el "subject" del patrón observer).
 let userData = {
     id: null,
     email: null,
@@ -9,7 +8,6 @@ let userData = {
     bio: null,
 };
 
-// Callbacks suscriptos a los cambios de userData.
 let observers = [];
 
 supabase.auth.onAuthStateChange((event, session) => {
@@ -22,7 +20,6 @@ supabase.auth.onAuthStateChange((event, session) => {
         };
 
         getProfileById(userData.id).then((profile) => {
-            // Justo después del registro el perfil todavía no existe.
             if (profile !== undefined) {
                 userData = {
                     ...userData,

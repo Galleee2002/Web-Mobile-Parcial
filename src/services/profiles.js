@@ -13,7 +13,6 @@ export async function getProfileById(id) {
         throw new Error(error.message);
     }
 
-    // Se filtra por la PK, así que hay un solo resultado como máximo.
     return data[0];
 }
 

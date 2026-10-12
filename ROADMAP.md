@@ -92,7 +92,15 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 - [x] `UserProfile.vue`: `this.$route.params.id`, `getProfileById` y `getPostsByUser`. Sin `requiresAuth` ni realtime
 - [x] `Account.vue` (ver) y `EditAccount.vue` (editar `display_name` y `bio`). Ahí se crean `updateProfile` y `updateAuthProfile`. `.update()` ya está visto
 - [x] Mostrar errores en `Login.vue` y `Register.vue` (**no visto en clase**: el docente deja el `catch` vacío). Se guarda `errorMessage` en `data()`, el `catch` le pone un texto fijo en castellano (no el `error.message` de Supabase, que viene en inglés) y el template lo muestra con `<p v-if="errorMessage !== null" role="alert">`. `EditAccount.vue` hace lo mismo y además muestra "Cambios guardados." con `successMessage`. `role="alert"` es para que el lector de pantalla lea el mensaje apenas aparece
-- [ ] Pasada de accesibilidad y responsive (el JSDoc ya está, ver "Recordatorio: JSDoc"). El nav con sesión (email + "Cerrar sesión") ya ocupa todo el ancho cerca de 545px: en celular hay que acomodarlo
+- [x] Pasada de accesibilidad y responsive (el JSDoc ya está, ver "Recordatorio: JSDoc"). Lo que se hizo:
+    - Nav con menú hamburguesa (**no visto en clase**, decidido con el usuario). En celular hay un botón "Menú" que muestra u oculta la `ul`; desde `md:` la lista se ve siempre, en fila. `App.vue` guarda `menuOpen: false` en `data()` y tiene `toggleMenu()` y `closeMenu()`. El botón usa `@click="toggleMenu"`, `:aria-expanded="menuOpen"` (le dice al lector de pantalla si el menú está abierto) y `aria-controls="main-menu"` (qué elemento abre). La `ul` usa `:class="menuOpen ? 'flex' : 'hidden'"` más `md:flex`. Cada `RouterLink` lleva `@click="closeMenu"`, para que el menú se cierre al navegar, y `handleLogout` también lo cierra. El nav ya no tiene `h-15`, y en `index.html` la grilla pasa de `grid-rows-[60px_1fr_100px]` a `grid-rows-[auto_1fr_100px]`, porque con el menú abierto el nav es más alto. El docente tiene un nav de una sola fila
+    - El nav va dentro de un `<header>` (**no visto en clase**: el docente pone el `<nav>` suelto)
+    - `wrap-break-word` en `.page-title` y en el autor y el cuerpo de `PostCard` (**no visto en clase**): un email o una URL larga no tienen espacios, y sin esto generan scroll horizontal en celular (por ejemplo "Perfil de prueba.agente@devchat.dev")
+    - Borde de los inputs y textareas de `border-iron-grey-400` a `border-iron-grey-600`. El 400 sobre blanco daba ~2.8:1 y WCAG pide 3:1 para el borde de un control; el 600 da ~5.5:1. El docente usa `border-gray-700`
+    - `NewPost.vue` muestra el error igual que login, registro y editar cuenta: `errorMessage` + `<p v-if="errorMessage !== null" role="alert">` (**no visto en clase**)
+    - Listado vacío (**no visto en clase**): `Home.vue` muestra "Todavía no hay publicaciones." y `UserProfile.vue` "Este usuario todavía no publicó nada.", con `v-if="posts.length === 0"` y el `<ol v-else>`. En el feed, cuando llega la primera publicación por realtime, la lista aparece sola
+    - `required` y `autocomplete` en los inputs de `Login.vue` (`email`, `current-password`) y `Register.vue` (`email`, `new-password`) (**no visto en clase**). `autocomplete` le dice al navegador y al gestor de contraseñas qué dato va en cada campo
+    - Se sacaron los comentarios que no son JSDoc (`App.vue`, `router.js`, `auth.js`, `profiles.js`). Lo que explicaban sigue en este archivo y en `AGENTS.md`
 
 Notas de la prueba en el navegador:
 
@@ -111,7 +119,7 @@ Notas de la prueba en el navegador:
 | Crear publicaciones | `NewPost.vue`, con sesión |
 | Perfil de cada usuario, con sus publicaciones | `UserProfile.vue`, link desde `PostCard` |
 | El perfil propio administra sus datos | `Account.vue` y `EditAccount.vue` |
-| HTML semántico, accesibilidad, usabilidad, JSDoc, nombres, archivos | Pasada final. El listado usa `section`, `ol` y `li`; el perfil usa `dl`, `dt` y `dd` |
+| HTML semántico, accesibilidad, usabilidad, JSDoc, nombres, archivos | `header`, `nav`, `main` y `footer` en `App.vue`; el listado usa `section`, `ol` y `li`; el perfil usa `dl`, `dt` y `dd`. Menú hamburguesa con `aria-expanded` en celular |
 
 ## Entrega
 

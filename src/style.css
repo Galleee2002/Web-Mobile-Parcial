@@ -64,6 +64,6 @@
 
 @layer components {
     .page-title {
-        @apply mb-4 text-3xl font-bold text-steel-blue-800;
+        @apply mb-4 text-3xl font-bold text-steel-blue-800 wrap-break-word;
     }
 }

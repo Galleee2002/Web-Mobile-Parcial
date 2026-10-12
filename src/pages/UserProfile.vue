@@ -48,7 +48,8 @@ export default {
         <section>
             <h2 class="mb-3 text-xl">Publicaciones</h2>
 
-            <ol class="flex flex-col gap-4">
+            <p v-if="posts.length === 0">Este usuario todavía no publicó nada.</p>
+            <ol v-else class="flex flex-col gap-4">
                 <PostCard v-for="post in posts" :post="post" />
             </ol>
         </section>

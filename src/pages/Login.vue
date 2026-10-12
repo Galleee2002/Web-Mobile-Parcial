@@ -46,8 +46,10 @@ export default {
             <input
                 type="email"
                 id="email"
-                class="w-full p-2 border border-iron-grey-400 rounded"
+                class="w-full p-2 border border-iron-grey-600 rounded"
                 v-model="credentials.email"
+                autocomplete="email"
+                required
             />
         </div>
         <div class="mb-3">
@@ -55,8 +57,10 @@ export default {
             <input
                 type="password"
                 id="password"
-                class="w-full p-2 border border-iron-grey-400 rounded"
+                class="w-full p-2 border border-iron-grey-600 rounded"
                 v-model="credentials.password"
+                autocomplete="current-password"
+                required
             />
         </div>
         <p

@@ -37,9 +37,12 @@ export default {
     <section>
         <h2 class="sr-only">Publicaciones</h2>
 
-        <ol v-if="!loading" class="flex flex-col gap-4">
-            <PostCard v-for="post in posts" :post="post" />
-        </ol>
+        <template v-if="!loading">
+            <p v-if="posts.length === 0">Todavía no hay publicaciones.</p>
+            <ol v-else class="flex flex-col gap-4">
+                <PostCard v-for="post in posts" :post="post" />
+            </ol>
+        </template>
         <div v-else>Cargando...</div>
     </section>
 </template>
