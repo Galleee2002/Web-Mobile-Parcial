@@ -42,6 +42,7 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 
 - `PageTitle.vue`: título de cada página (slot + clase `.page-title`). El docente lo llama `BaseH1` y la clase es `.h1`.
 - `PostCard.vue`: una publicación (autor, texto, fecha). Se usa en el feed y en el perfil. La raíz es un `<li>`. El autor es un `RouterLink` con `:to="'/usuarios/' + post.user_id"` (concatenación, como en el chat del docente). El `v-for` no lleva `:key`. La fecha se muestra con un método `formatDate(date)` que hace `new Date(date).toLocaleString('es-AR')`, adentro de `<time :datetime="post.created_at">` (**no visto en clase**, decidido con el usuario: el docente imprime `created_at` crudo, en formato ISO y hora UTC). `toLocaleString` la pasa a la hora local del navegador.
+- `ProfileCard.vue`: la tarjeta del perfil (avatar, nombre, email y un `<dl>` con nombre, biografía y email). Se usa en `Account.vue` y en `UserProfile.vue`, por eso es un componente, como `PostCard`. El prop `profile` lleva `type`, `required` y `default: null`. Tiene un `<slot />` en la cabecera: `Account` le pasa el botón "Editar perfil" y `UserProfile` no le pasa nada.
 - El formulario de publicar vive en `NewPost.vue`, igual que el del chat vive en la página. No hay `PostForm.vue`.
 - No se arman `BaseLoader` ni `LoadingContext`. La carga es el texto "Cargando..." del chat.
 
@@ -107,6 +108,12 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
     - Sin sesión aparece "Registrate" (`/registro`) como botón blanco, con la clase `.nav-register`. No lleva raya. Con sesión, el botón "Cerrar sesión" usa la misma clase y ya no muestra el email
     - Inicio, Publicar y Cuenta pasan a ser iconos de Lucide (`House`, `CircleFadingPlus`, `User`), centrados en el nav. Cada link guarda su nombre en `<span class="sr-only">` (lo lee el lector de pantalla) y en `title` (aparece al pasar el mouse). Sin raya: `.nav-icon` pone el icono en blanco al pasar el mouse, y `.nav-icon-active` le da fondo `steel-blue-800` en la página actual
     - Desde `md:` el nav es una grilla de tres columnas, `md:grid-cols-[1fr_auto_1fr]`: logo a la izquierda, iconos en el centro y botones (Ingresar/Registrate o Cerrar sesión) a la derecha. Las dos columnas de los costados miden lo mismo, así los iconos quedan justo en el medio. El `div id="main-menu"` lleva `md:contents` para que sus dos `ul` sean columnas de esa grilla; en celular sigue siendo el menú que se abre con "Menú"
+- [x] Diseño de la vista Cuenta (**no visto en clase**, decidido con el usuario, a partir de una imagen de referencia):
+    - Nuevo componente `ProfileCard.vue` (ver "Componentes"): tarjeta blanca con borde y sombra suave, avatar gris con el icono `User` de Lucide, el nombre en grande y el email debajo. Si no hay `display_name`, el título de la tarjeta muestra el email
+    - Los datos siguen en un `<dl>`, ahora con una fila por dato y un icono a la izquierda (`User`, `FileText`, `Mail`, con `aria-hidden="true"` porque el `<dt>` ya dice qué dato es). Cada par `dt`/`dd` va dentro de un `<div>`: el HTML lo permite y así cada fila se puede acomodar con `flex`. La biografía va en una caja gris, en itálica
+    - En `/cuenta`, el título "Mi cuenta" va centrado con una raya `steel-blue-400` debajo. Es solo en esta página: `.page-title` no cambia. El link "Editar" pasa a ser el botón "Editar perfil" con el icono `Pencil`, adentro de la tarjeta
+    - En `/usuarios/:id` se usa la misma tarjeta, sin botón. Se escribe `<ProfileCard :profile="profile" class="mb-8" />`: Vue le pasa esa `class` al `<article>` raíz del componente. Con la misma idea, el título lleva `<PageTitle class="pt-4 mb-6">` para separarlo del nav y de la tarjeta; `mb-6` le gana al `mb-4` de `.page-title` porque las utilidades de Tailwind van después de `@layer components`
+    - En celular, la cabecera de la tarjeta se apila (avatar, nombre y botón uno abajo del otro); desde `sm:` va en fila con el botón a la derecha
 
 Notas de la prueba en el navegador:
 
@@ -125,7 +132,7 @@ Notas de la prueba en el navegador:
 | Crear publicaciones | `NewPost.vue`, con sesión |
 | Perfil de cada usuario, con sus publicaciones | `UserProfile.vue`, link desde `PostCard` |
 | El perfil propio administra sus datos | `Account.vue` y `EditAccount.vue` |
-| HTML semántico, accesibilidad, usabilidad, JSDoc, nombres, archivos | `header`, `nav`, `main` y `footer` en `App.vue`; el listado usa `section`, `ol` y `li`; el perfil usa `dl`, `dt` y `dd`. Menú hamburguesa con `aria-expanded` en celular |
+| HTML semántico, accesibilidad, usabilidad, JSDoc, nombres, archivos | `header`, `nav`, `main` y `footer` en `App.vue`; el listado usa `section`, `ol` y `li`; el perfil usa `article`, `dl`, `dt` y `dd` en `ProfileCard`. Menú hamburguesa con `aria-expanded` en celular |
 
 ## Entrega
 

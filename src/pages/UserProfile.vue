@@ -1,12 +1,13 @@
 <script>
 import PageTitle from '../components/PageTitle.vue';
 import PostCard from '../components/PostCard.vue';
+import ProfileCard from '../components/ProfileCard.vue';
 import { getProfileById } from '../services/profiles.js';
 import { getPostsByUser } from '../services/posts.js';
 
 export default {
     name: 'UserProfile',
-    components: { PageTitle, PostCard },
+    components: { PageTitle, PostCard, ProfileCard },
     data() {
         return {
             profile: {
@@ -34,16 +35,9 @@ export default {
 
 <template>
     <template v-if="!loading">
-        <PageTitle>Perfil de {{ profile.email }}</PageTitle>
+        <PageTitle class="pt-4 mb-6">Perfil de {{ profile.email }}</PageTitle>
 
-        <dl class="mb-4">
-            <dt class="m-0.5 font-bold">Nombre</dt>
-            <dd class="ms-4 mb-2">{{ profile.display_name || 'Sin especificar...' }}</dd>
-            <dt class="m-0.5 font-bold">Biografía</dt>
-            <dd class="ms-4 mb-2 italic">{{ profile.bio || 'Sin especificar...' }}</dd>
-            <dt class="m-0.5 font-bold">Email</dt>
-            <dd class="ms-4 mb-2">{{ profile.email }}</dd>
-        </dl>
+        <ProfileCard :profile="profile" class="mb-8" />
 
         <section>
             <h2 class="mb-3 text-xl">Publicaciones</h2>

@@ -25,7 +25,7 @@ DevChat es una red social para programadores y desarrolladores web, donde compar
 
 El docente y esta entrega no hacen lo mismo. Esto queda así a propósito:
 
-- Nombres propios: tablas `profiles` y `posts`, rutas `/acceso`, `/registro`, `/publicar`, `/cuenta`, `/cuenta/editar` y `/usuarios/:id`, componentes `PageTitle` y `PostCard`. El perfil tiene `display_name` y `bio`. No se agrega la columna `career` del docente.
+- Nombres propios: tablas `profiles` y `posts`, rutas `/acceso`, `/registro`, `/publicar`, `/cuenta`, `/cuenta/editar` y `/usuarios/:id`, componentes `PageTitle`, `PostCard` y `ProfileCard`. El perfil tiene `display_name` y `bio`. No se agrega la columna `career` del docente.
 - Supabase en la nube, con `VITE_SUPABASE_URL` y `VITE_SUPABASE_PUBLISHABLE_KEY`. No se copia la URL local de `supabase.js` ni `supabase/seed.sql`. Ese seed crea usuarios con una función plpgsql para el deploy local con Docker.
 - Nav sin sesión: "Inicio", "Ingresar" y "Registrate". "Registrate" es un botón blanco (`.nav-register`). El docente muestra "Crear cuenta" como link común.
 - Nav con diseño (no visto en clase, decidido con el usuario): icono `MessagesSquare` de `@lucide/vue` a la izquierda de "DevChat", registrado en `components`. Desde `md:` el nav es una grilla de tres columnas (`md:grid-cols-[1fr_auto_1fr]`): logo a la izquierda, iconos en el centro y botones a la derecha. Inicio, Publicar y Cuenta son iconos (`House`, `CircleFadingPlus`, `User`) con el nombre en un `<span class="sr-only">` y en `title`. Los iconos usan `.nav-icon` (hover en blanco) y `.nav-icon-active` (fondo `steel-blue-800`); no llevan raya. "Inicio" usa `exact-active-class`, "Publicar" `active-class`, y "Cuenta" usa `:class` con `$route.path.startsWith('/cuenta')`, porque `/cuenta/editar` es una ruta hermana y el router no la marca. "Ingresar" sigue como texto con la raya blanca (`.nav-link` y `.nav-link-active`).
@@ -36,6 +36,7 @@ El docente y esta entrega no hacen lo mismo. Esto queda así a propósito:
 - Los servicios no llevan los `console.log` del docente (por ejemplo, el del payload en la suscripción realtime): solo `console.error` cuando hay error.
 - En `onAuthStateChange`, si `getProfileById` no devuelve perfil, no se leen sus campos. Justo después del registro el perfil todavía no existe. El docente no tiene ese `if`.
 - El formulario de publicar queda en `NewPost.vue`, como el formulario del chat queda en la página. `PostCard.vue` sí es un componente: el docente muestra el mensaje solo en el chat, y acá el mismo bloque va en el feed y en el perfil. La raíz de `PostCard` es un `<li>`, adentro de un `<ol>`.
+- `ProfileCard.vue` también es un componente porque la misma tarjeta va en `/cuenta` y en `/usuarios/:id`. Recibe el prop `profile` y tiene un `<slot />` en la cabecera: `Account` le pasa el botón "Editar perfil" (icono `Pencil`) y `UserProfile` no le pasa nada. Diseño no visto en clase, decidido con el usuario: avatar gris con el icono `User`, nombre y email arriba, y un `<dl>` con una fila por dato (iconos `User`, `FileText` y `Mail`). Cada par `dt`/`dd` va dentro de un `<div>`. El título centrado con la raya `steel-blue-400` va solo en `/cuenta`; `.page-title` no cambia.
 - `vite.config.js` todavía trae el scaffold de Vite (`defineConfig`, el alias `@`, `vite-plugin-vue-devtools`). No se usa `@` en los imports. El docente exporta solo `{ plugins: [vue(), tailwind()] }`.
 
 ## Stack
@@ -69,7 +70,7 @@ src/
   style.css            @import tailwindcss + paleta @theme + clases en @layer components
   router/router.js     rutas + guard de sesión
   services/            supabase.js, auth.js, profiles.js, posts.js
-  components/          PageTitle.vue, PostCard.vue
+  components/          PageTitle.vue, PostCard.vue, ProfileCard.vue
   pages/               una vista por ruta (ver ROADMAP.md)
 supabase/
   migrations/          una tabla por archivo
@@ -87,7 +88,7 @@ Patrones del docente, aplicados a lo de DevChat:
 - Servicios: `const { data, error } = await supabase.from('tabla')...`. Si hay error: `console.error('[archivo.js función] Mensaje: ', error)` y `throw new Error(error.message)`. El `.select()` del docente no usa `.order()` ni `.limit()`. En DevChat, las publicaciones se traen con `.select().order('created_at', { ascending: false })` (no visto en clase, decidido con el usuario). No se usa `.limit()`.
 - Un perfil por id: `.select().eq('id', id)` y `return data[0]`. Editar: `.update(data).eq('id', id)`. Las publicaciones de un usuario: el mismo `.eq()`, con la columna `user_id`. El perfil del docente no lista los mensajes de esa persona; la consigna sí pide las publicaciones, y `.eq()` ya está visto.
 - Formularios: `<form action="#" @submit.prevent="handleSubmit">`, `label for` + `id`, `v-model` sobre un objeto de `data()`, estado `loading`. En login y registro, `this.loading = false` va después del try/catch. Al editar el perfil, va en el `finally`.
-- El perfil propio son dos páginas, como `MyProfile` y `EditProfile`. `/cuenta` muestra los datos (`<dl>`, `<dt>`, `<dd>`, y `valor || 'Sin especificar...'`) y un `RouterLink` a `/cuenta/editar`. Esa segunda página tiene el formulario y llama a `updateAuthProfile`.
+- El perfil propio son dos páginas, como `MyProfile` y `EditProfile`. `/cuenta` muestra los datos con `ProfileCard` (`<dl>`, `<dt>`, `<dd>`, y `valor || 'Sin especificar...'`) y un `RouterLink` a `/cuenta/editar`. Esa segunda página tiene el formulario y llama a `updateAuthProfile`.
 - `updateAuthProfile(data)` actualiza la tabla, hace `userData = { ...userData, ...data }`, llama a `notifyAll()` y en el `catch` relanza el error. No redirige al guardar.
 - Nombres de columnas y de datos en snake_case como en la base (`display_name`, `user_id`, `created_at`).
 - Auth con patrón observer: `userData` + `observers`, `onAuthStateChange` carga el perfil y llama a `notifyAll()`. Los componentes usan `subscribeToAuthChanges(callback)`.
