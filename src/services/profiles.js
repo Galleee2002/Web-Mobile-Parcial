@@ -23,3 +23,12 @@ export async function createProfile({ id, email }) {
         throw new Error(error.message);
     }
 }
+
+export async function updateProfile(id, data) {
+    const { error } = await supabase.from('profiles').update(data).eq('id', id);
+
+    if (error) {
+        console.error('[profiles.js updateProfile] Error al editar el perfil: ', error);
+        throw new Error(error.message);
+    }
+}

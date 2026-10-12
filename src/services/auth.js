@@ -1,5 +1,5 @@
 import { supabase } from './supabase.js';
-import { createProfile, getProfileById } from './profiles.js';
+import { createProfile, getProfileById, updateProfile } from './profiles.js';
 
 // Datos del usuario autenticado (el "subject" del patrón observer).
 let userData = {
@@ -86,6 +86,20 @@ export async function login({ email, password }) {
 
 export async function logout() {
     await supabase.auth.signOut();
+}
+
+export async function updateAuthProfile(data) {
+    try {
+        await updateProfile(userData.id, data);
+
+        userData = {
+            ...userData,
+            ...data,
+        };
+        notifyAll();
+    } catch (error) {
+        throw error;
+    }
 }
 
 export function subscribeToAuthChanges(callback) {

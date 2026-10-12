@@ -12,12 +12,14 @@ export default {
                 password: '',
             },
             loading: false,
+            errorMessage: null,
         };
     },
     methods: {
         async handleSubmit() {
             try {
                 this.loading = true;
+                this.errorMessage = null;
 
                 await register({
                     email: this.credentials.email,
@@ -27,6 +29,8 @@ export default {
                 this.$router.push('/');
             } catch (error) {
                 console.error('[Register.vue handleSubmit] No se pudo crear la cuenta: ', error);
+                this.errorMessage =
+                    'No se pudo crear la cuenta. Revisá el email y que la contraseña tenga al menos 6 caracteres.';
             }
             this.loading = false;
         },
@@ -56,6 +60,13 @@ export default {
                 v-model="credentials.password"
             />
         </div>
+        <p
+            v-if="errorMessage !== null"
+            role="alert"
+            class="mb-3 p-2 rounded bg-red-50 text-red-700"
+        >
+            {{ errorMessage }}
+        </p>
         <button
             type="submit"
             class="transition px-4 py-2 rounded bg-steel-blue-700 text-white hover:bg-steel-blue-600 focus:bg-steel-blue-600 active:bg-steel-blue-800"
