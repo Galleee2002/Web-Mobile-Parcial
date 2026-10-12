@@ -86,9 +86,9 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 ## Falta
 
 - [x] Migración `20261011204000_grant_profiles_and_posts.sql` creada (ver Datos)
-- [ ] Aplicar la migración de permisos con `pnpm exec supabase db push` y volver a correr la consulta de `information_schema.role_table_grants`: tienen que aparecer `SELECT`, `INSERT` y `UPDATE`. Después, probar un registro nuevo y ver que se guarda la fila en `profiles`. Va antes del feed
-- [ ] `posts.js` + `PostCard.vue` + feed en `Home.vue` con realtime. El `let` de `unsubscribe` va afuera del componente
-- [ ] `NewPost.vue` con el formulario en la página
+- [x] Aplicar la migración de permisos con `pnpm exec supabase db push` y volver a correr la consulta de `information_schema.role_table_grants`: tienen que aparecer `SELECT`, `INSERT` y `UPDATE`. Después, probar un registro nuevo y ver que se guarda la fila en `profiles`. Va antes del feed
+- [x] `posts.js` + `PostCard.vue` + feed en `Home.vue` con realtime. El `let` de `unsubscribe` va afuera del componente. `posts.js` tiene por ahora solo `getAllPosts` y `subscribeToNewPosts`; el prop de `PostCard` lleva `type`, `required` y `default: null`, como `LoadingContext`
+- [ ] `NewPost.vue` con el formulario en la página. Ahí se crea `createPost` en `posts.js`
 - [ ] `UserProfile.vue`: `this.$route.params.id`, `getProfileById` y `getPostsByUser`. Sin `requiresAuth`
 - [ ] `Account.vue` (ver) y `EditAccount.vue` (editar `display_name` y `bio`). Ahí se crean `updateProfile` y `updateAuthProfile`. `.update()` ya está visto
 - [ ] Mostrar errores en `Login.vue` y `Register.vue` (**no visto en clase**: el docente deja el `catch` vacío; por ahora solo se hace `console.error`)
@@ -116,3 +116,7 @@ Notas de la prueba en el navegador:
 ## Entrega
 
 Zip/rar `apellido-nombre` con el proyecto completo (incluida `supabase/migrations/`) y `datos.txt` (carrera, materia, cuatrimestre, año, turno, comisión, apellido y nombre, docente, 1er parcial). Como se usa la nube no va el deploy local, pero el proyecto de Supabase no puede estar pausado al momento de la corrección.
+
+## Recordatorio: JSDoc
+
+- [ ] Se sacaron todos los bloques JSDoc de `posts.js`, `profiles.js` y `auth.js`. La consigna evalúa "documentación apropiada usando JSDoc", así que antes de entregar hay que volver a escribirlos en las funciones de `src/services/`, como el docente: primera línea vacía (` *`), `@param {tipo} nombre` y `@returns {tipo}` solo cuando la función devuelve algo.

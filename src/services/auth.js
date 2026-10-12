@@ -45,12 +45,6 @@ supabase.auth.onAuthStateChange((event, session) => {
     notifyAll();
 });
 
-/**
- * Crea una cuenta nueva y su perfil en la tabla profiles.
- *
- * @param {{email: string, password: string}} data
- * @returns {Promise<{id: string, email: string}>}
- */
 export async function register({ email, password }) {
     const { data, error } = await supabase.auth.signUp({
         email,
@@ -73,12 +67,6 @@ export async function register({ email, password }) {
     };
 }
 
-/**
- * Inicia sesión con email y contraseña.
- *
- * @param {{email: string, password: string}} data
- * @returns {Promise<{id: string, email: string}>}
- */
 export async function login({ email, password }) {
     const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -96,31 +84,16 @@ export async function login({ email, password }) {
     };
 }
 
-/**
- * Cierra la sesión del usuario autenticado.
- *
- * @returns {Promise<void>}
- */
 export async function logout() {
     await supabase.auth.signOut();
 }
 
-/**
- * Suscribe un callback a los cambios del usuario autenticado.
- * Lo ejecuta en el momento con los datos actuales.
- *
- * @param {(user: {id: string|null, email: string|null, display_name: string|null, bio: string|null}) => void} callback
- * @returns {void}
- */
 export function subscribeToAuthChanges(callback) {
     observers.push(callback);
 
     notify(callback);
 }
 
-/**
- * @param {(user: {id: string|null, email: string|null, display_name: string|null, bio: string|null}) => void} callback
- */
 function notify(callback) {
     callback({ ...userData });
 }

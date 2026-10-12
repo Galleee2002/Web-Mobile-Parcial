@@ -1,11 +1,5 @@
 import { supabase } from './supabase.js';
 
-/**
- * Trae el perfil de un usuario por su id.
- *
- * @param {string} id
- * @returns {Promise<{id: string, email: string, display_name: string|null, bio: string|null, created_at: string}|undefined>}
- */
 export async function getProfileById(id) {
     const { data, error } = await supabase.from('profiles').select().eq('id', id);
 
@@ -18,12 +12,6 @@ export async function getProfileById(id) {
     return data[0];
 }
 
-/**
- * Crea el perfil de un usuario recién registrado.
- *
- * @param {{id: string, email: string}} data
- * @returns {Promise<void>}
- */
 export async function createProfile({ id, email }) {
     const { error } = await supabase.from('profiles').insert({
         id: id,
