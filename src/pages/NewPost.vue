@@ -47,30 +47,49 @@ export default {
 </script>
 
 <template>
-    <PageTitle>Publicar</PageTitle>
+    <div class="max-w-2xl mx-auto">
+        <section class="p-6 bg-white rounded-xl border border-iron-grey-100 shadow-sm">
+            <PageTitle>Publicar</PageTitle>
+            <p class="mb-6 text-iron-grey-600">
+                Compartí una actualización, una idea o un avance de tu proyecto.
+            </p>
 
-    <form action="#" @submit.prevent="handleSubmit">
-        <div class="mb-3">
-            <label for="body" class="block mb-2">¿En qué estás trabajando?</label>
-            <textarea
-                id="body"
-                class="w-full p-2 border border-iron-grey-600 rounded"
-                v-model="newPost.body"
-                required
-            ></textarea>
-        </div>
-        <p
-            v-if="errorMessage !== null"
-            role="alert"
-            class="mb-3 p-2 rounded bg-red-50 text-red-700"
-        >
-            {{ errorMessage }}
-        </p>
-        <button
-            type="submit"
-            class="transition px-4 py-2 rounded bg-steel-blue-700 text-white hover:bg-steel-blue-600 focus:bg-steel-blue-600 active:bg-steel-blue-800"
-        >
-            Publicar
-        </button>
-    </form>
+            <form action="#" @submit.prevent="handleSubmit">
+                <div class="mb-4">
+                    <label for="body" class="block mb-2 font-semibold text-steel-blue-900">
+                        ¿En qué estás trabajando?
+                    </label>
+                    <textarea
+                        id="body"
+                        rows="5"
+                        placeholder="Escribí tu publicación acá..."
+                        class="w-full p-3 border border-iron-grey-600 rounded-lg resize-y"
+                        v-model="newPost.body"
+                        required
+                    ></textarea>
+                </div>
+                <p
+                    v-if="errorMessage !== null"
+                    role="alert"
+                    class="mb-4 p-2 rounded-lg bg-red-50 text-red-700"
+                >
+                    {{ errorMessage }}
+                </p>
+                <div class="flex items-center justify-between gap-4">
+                    <RouterLink
+                        to="/"
+                        class="px-4 py-2 rounded-lg font-semibold text-iron-grey-600 hover:bg-iron-grey-50 hover:text-steel-blue-900"
+                    >
+                        Cancelar
+                    </RouterLink>
+                    <button
+                        type="submit"
+                        class="px-6 py-2 rounded-lg bg-steel-blue-700 font-semibold text-white hover:bg-steel-blue-800"
+                    >
+                        Publicar
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
 </template>

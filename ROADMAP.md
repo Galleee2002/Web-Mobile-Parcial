@@ -114,6 +114,12 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
     - En `/cuenta`, el título "Mi cuenta" va centrado con una raya `steel-blue-400` debajo. Es solo en esta página: `.page-title` no cambia. El link "Editar" pasa a ser el botón "Editar perfil" con el icono `Pencil`, adentro de la tarjeta
     - En `/usuarios/:id` se usa la misma tarjeta, sin botón. Se escribe `<ProfileCard :profile="profile" class="mb-8" />`: Vue le pasa esa `class` al `<article>` raíz del componente. Con la misma idea, el título lleva `<PageTitle class="pt-4 mb-6">` para separarlo del nav y de la tarjeta; `mb-6` le gana al `mb-4` de `.page-title` porque las utilidades de Tailwind van después de `@layer components`
     - En celular, la cabecera de la tarjeta se apila (avatar, nombre y botón uno abajo del otro); desde `sm:` va en fila con el botón a la derecha
+- [x] Diseño de `/publicar` (**no visto en clase**, decidido con el usuario, a partir de una imagen de referencia). La lógica de `NewPost.vue` no cambia, solo el template:
+    - El formulario va en una tarjeta blanca centrada (`max-w-2xl mx-auto`), con las mismas clases que `ProfileCard`: `p-6 bg-white rounded-xl border border-iron-grey-100 shadow-sm`. La tarjeta es un `<section>`
+    - Debajo del título, el párrafo "Compartí una actualización, una idea o un avance de tu proyecto."
+    - El `textarea` lleva `rows="5"` (alto inicial de cinco líneas), `placeholder="Escribí tu publicación acá..."` y `resize-y` (solo se agranda hacia abajo). El borde sigue en `iron-grey-600`
+    - Abajo, "Cancelar" a la izquierda y "Publicar" a la derecha (`flex justify-between`). "Cancelar" es un `RouterLink` a `/` con texto gris y sin fondo: solo navega al feed, no envía nada. "Publicar" es el `button type="submit"` con fondo `steel-blue-700`, igual que "Editar perfil"
+    - De la imagen no se tomaron la cabecera con avatar y email, la barra de Imagen y Archivo ni el contador de caracteres
 
 Notas de la prueba en el navegador:
 
