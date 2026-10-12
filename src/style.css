@@ -66,4 +66,24 @@
     .page-title {
         @apply mb-4 text-3xl font-bold text-steel-blue-800 wrap-break-word;
     }
+
+    .nav-link {
+        @apply inline-block pb-1 border-b-2 border-transparent hover:border-steel-blue-300;
+    }
+
+    .nav-link-active {
+        @apply border-white hover:border-white;
+    }
+
+    .nav-icon {
+        @apply flex p-2 rounded-lg text-steel-blue-200 hover:text-white hover:bg-steel-blue-600;
+    }
+
+    .nav-icon-active {
+        @apply text-white bg-steel-blue-800 hover:bg-steel-blue-800;
+    }
+
+    .nav-register {
+        @apply block w-fit px-4 py-2 rounded-lg bg-white font-semibold text-steel-blue-800 hover:bg-steel-blue-100;
+    }
 }

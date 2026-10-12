@@ -30,7 +30,7 @@ Red social para programadores y desarrolladores web: comparten su trabajo, charl
 
 Rutas con sesión: `meta: { requiresAuth: true, }` y `beforeEach` hace `if (to.meta?.requiresAuth && user.id === null) return '/acceso'`.
 
-`/acceso` y `/registro` siguen siendo dos páginas (una hace `login`, la otra `register`), pero el nav sin sesión muestra solo "Ingresar". Al registro se llega con el link "¿No tenés cuenta? Registrate" de `Login.vue`, y `Register.vue` tiene "¿Ya tenés cuenta? Ingresá". El docente, en el nav, muestra los dos links.
+`/acceso` y `/registro` siguen siendo dos páginas (una hace `login`, la otra `register`). El nav sin sesión muestra "Ingresar" y el botón blanco "Registrate". Al registro se llega con el link "¿No tenés cuenta? Registrate" de `Login.vue`, y `Register.vue` tiene "¿Ya tenés cuenta? Ingresá". El docente, en el nav, muestra los dos links.
 
 Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda al chat.
 
@@ -101,6 +101,12 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
     - Listado vacío (**no visto en clase**): `Home.vue` muestra "Todavía no hay publicaciones." y `UserProfile.vue` "Este usuario todavía no publicó nada.", con `v-if="posts.length === 0"` y el `<ol v-else>`. En el feed, cuando llega la primera publicación por realtime, la lista aparece sola
     - `required` y `autocomplete` en los inputs de `Login.vue` (`email`, `current-password`) y `Register.vue` (`email`, `new-password`) (**no visto en clase**). `autocomplete` le dice al navegador y al gestor de contraseñas qué dato va en cada campo
     - Se sacaron los comentarios que no son JSDoc (`App.vue`, `router.js`, `auth.js`, `profiles.js`). Lo que explicaban sigue en este archivo y en `AGENTS.md`
+- [x] Diseño del nav (**no visto en clase**, decidido con el usuario). Las rutas y los nombres no cambian:
+    - Icono `MessagesSquare` de Lucide a la izquierda de "DevChat". Se instaló `@lucide/vue` (el paquete viejo `lucide-vue-next` está deprecado). En `App.vue` se importa y se registra en `components`. Lleva `aria-hidden="true"` porque el link ya se llama "DevChat"
+    - Raya blanca debajo del link de la página actual. En `style.css`, `.nav-link` deja siempre un borde inferior transparente (así la barra no salta al cambiar de página) y `.nav-link-active` lo pinta de blanco. Ahora solo la usa "Ingresar", con `active-class="nav-link-active"`. En los iconos, "Inicio" usa `exact-active-class="nav-icon-active"`, "Publicar" `active-class="nav-icon-active"` y "Cuenta" `:class="$route.path.startsWith('/cuenta') ? 'nav-icon-active' : ''"`: `/cuenta/editar` es otra ruta del mismo nivel, y `active-class` no la marcaría
+    - Sin sesión aparece "Registrate" (`/registro`) como botón blanco, con la clase `.nav-register`. No lleva raya. Con sesión, el botón "Cerrar sesión" usa la misma clase y ya no muestra el email
+    - Inicio, Publicar y Cuenta pasan a ser iconos de Lucide (`House`, `CircleFadingPlus`, `User`), centrados en el nav. Cada link guarda su nombre en `<span class="sr-only">` (lo lee el lector de pantalla) y en `title` (aparece al pasar el mouse). Sin raya: `.nav-icon` pone el icono en blanco al pasar el mouse, y `.nav-icon-active` le da fondo `steel-blue-800` en la página actual
+    - Desde `md:` el nav es una grilla de tres columnas, `md:grid-cols-[1fr_auto_1fr]`: logo a la izquierda, iconos en el centro y botones (Ingresar/Registrate o Cerrar sesión) a la derecha. Las dos columnas de los costados miden lo mismo, así los iconos quedan justo en el medio. El `div id="main-menu"` lleva `md:contents` para que sus dos `ul` sean columnas de esa grilla; en celular sigue siendo el menú que se abre con "Menú"
 
 Notas de la prueba en el navegador:
 

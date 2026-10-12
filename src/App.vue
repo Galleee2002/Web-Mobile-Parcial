@@ -1,8 +1,10 @@
 <script>
+import { CircleFadingPlus, House, MessagesSquare, User } from '@lucide/vue';
 import { logout, subscribeToAuthChanges } from './services/auth.js';
 
 export default {
     name: 'App',
+    components: { CircleFadingPlus, House, MessagesSquare, User },
     data() {
         return {
             user: {
@@ -38,9 +40,16 @@ export default {
 <template>
     <header>
         <nav
-            class="flex flex-wrap items-center justify-between gap-4 p-4 bg-steel-blue-700 text-white md:justify-start md:gap-8"
+            class="flex flex-wrap items-center justify-between gap-4 p-4 bg-steel-blue-700 text-white md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8"
         >
-            <RouterLink class="text-xl" to="/" @click="closeMenu">DevChat</RouterLink>
+            <RouterLink
+                class="flex items-center gap-2 w-fit text-xl font-bold"
+                to="/"
+                @click="closeMenu"
+            >
+                <MessagesSquare class="size-7" aria-hidden="true" />
+                DevChat
+            </RouterLink>
             <button
                 type="button"
                 class="md:hidden"
@@ -50,34 +59,81 @@ export default {
             >
                 Menú
             </button>
-            <ul
+            <div
                 id="main-menu"
                 :class="menuOpen ? 'flex' : 'hidden'"
-                class="w-full flex-col gap-2 md:flex md:w-auto md:flex-row md:gap-4 md:items-center"
+                class="w-full flex-col gap-4 md:contents"
             >
-                <li>
-                    <RouterLink to="/" @click="closeMenu">Inicio</RouterLink>
-                </li>
+                <ul class="flex items-center gap-2">
+                    <li>
+                        <RouterLink
+                            class="nav-icon"
+                            exact-active-class="nav-icon-active"
+                            to="/"
+                            title="Inicio"
+                            @click="closeMenu"
+                        >
+                            <House class="size-6" aria-hidden="true" />
+                            <span class="sr-only">Inicio</span>
+                        </RouterLink>
+                    </li>
+                    <template v-if="user.id !== null">
+                        <li>
+                            <RouterLink
+                                class="nav-icon"
+                                active-class="nav-icon-active"
+                                to="/publicar"
+                                title="Publicar"
+                                @click="closeMenu"
+                            >
+                                <CircleFadingPlus class="size-6" aria-hidden="true" />
+                                <span class="sr-only">Publicar</span>
+                            </RouterLink>
+                        </li>
+                        <li>
+                            <RouterLink
+                                class="nav-icon"
+                                :class="$route.path.startsWith('/cuenta') ? 'nav-icon-active' : ''"
+                                to="/cuenta"
+                                title="Cuenta"
+                                @click="closeMenu"
+                            >
+                                <User class="size-6" aria-hidden="true" />
+                                <span class="sr-only">Cuenta</span>
+                            </RouterLink>
+                        </li>
+                    </template>
+                </ul>
 
-                <template v-if="user.id === null">
-                    <li>
-                        <RouterLink to="/acceso" @click="closeMenu">Ingresar</RouterLink>
-                    </li>
-                </template>
-                <template v-else>
-                    <li>
-                        <RouterLink to="/publicar" @click="closeMenu">Publicar</RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/cuenta" @click="closeMenu">Cuenta</RouterLink>
-                    </li>
-                    <li>
+                <ul
+                    class="flex flex-col gap-2 md:flex-row md:items-center md:gap-4 md:justify-self-end"
+                >
+                    <template v-if="user.id === null">
+                        <li>
+                            <RouterLink
+                                class="nav-link"
+                                active-class="nav-link-active"
+                                to="/acceso"
+                                @click="closeMenu"
+                            >
+                                Ingresar
+                            </RouterLink>
+                        </li>
+                        <li>
+                            <RouterLink class="nav-register" to="/registro" @click="closeMenu">
+                                Registrate
+                            </RouterLink>
+                        </li>
+                    </template>
+                    <li v-else>
                         <form action="#" @submit.prevent="handleLogout">
-                            <button type="submit">{{ user.email }} (Cerrar sesión)</button>
+                            <button type="submit" class="nav-register cursor-pointer">
+                                Cerrar sesión
+                            </button>
                         </form>
                     </li>
-                </template>
-            </ul>
+                </ul>
+            </div>
         </nav>
     </header>
     <main class="container p-4 mx-auto">
