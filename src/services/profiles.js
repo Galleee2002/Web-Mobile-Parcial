@@ -1,5 +1,10 @@
 import { supabase } from './supabase.js';
 
+/**
+ *
+ * @param {string} id
+ * @returns {Promise<{id: string, email: string, display_name: string|null, bio: string|null, created_at: string}>}
+ */
 export async function getProfileById(id) {
     const { data, error } = await supabase.from('profiles').select().eq('id', id);
 
@@ -12,6 +17,10 @@ export async function getProfileById(id) {
     return data[0];
 }
 
+/**
+ *
+ * @param {{id: string, email: string}} data
+ */
 export async function createProfile({ id, email }) {
     const { error } = await supabase.from('profiles').insert({
         id: id,
@@ -24,6 +33,11 @@ export async function createProfile({ id, email }) {
     }
 }
 
+/**
+ *
+ * @param {string} id
+ * @param {{display_name?: string|null, bio?: string|null}} data
+ */
 export async function updateProfile(id, data) {
     const { error } = await supabase.from('profiles').update(data).eq('id', id);
 

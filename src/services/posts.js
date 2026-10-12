@@ -1,5 +1,9 @@
 import { supabase } from './supabase.js';
 
+/**
+ *
+ * @returns {Promise<{id: number, user_id: string, email: string, body: string, created_at: string}[]>}
+ */
 export async function getAllPosts() {
     const { data, error } = await supabase
         .from('posts')
@@ -14,6 +18,11 @@ export async function getAllPosts() {
     return data;
 }
 
+/**
+ *
+ * @param {string} userId
+ * @returns {Promise<{id: number, user_id: string, email: string, body: string, created_at: string}[]>}
+ */
 export async function getPostsByUser(userId) {
     const { data, error } = await supabase
         .from('posts')
@@ -32,6 +41,10 @@ export async function getPostsByUser(userId) {
     return data;
 }
 
+/**
+ *
+ * @param {{user_id: string, email: string, body: string}} data
+ */
 export async function createPost({ user_id, email, body }) {
     const { error } = await supabase.from('posts').insert({
         user_id: user_id,
@@ -45,6 +58,11 @@ export async function createPost({ user_id, email, body }) {
     }
 }
 
+/**
+ *
+ * @param {(post: {id: number, user_id: string, email: string, body: string, created_at: string}) => void} callback
+ * @returns {() => void} Función para cancelar la suscripción.
+ */
 export function subscribeToNewPosts(callback) {
     const postsChannel = supabase.channel('posts');
 

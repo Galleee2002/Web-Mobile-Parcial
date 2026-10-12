@@ -8,6 +8,11 @@ export default {
             default: null,
         },
     },
+    methods: {
+        formatDate(date) {
+            return new Date(date).toLocaleString('es-AR');
+        },
+    },
 };
 </script>
 
@@ -20,6 +25,8 @@ export default {
             publicó:
         </div>
         <div class="mb-1">{{ post.body }}</div>
-        <div class="text-sm text-iron-grey-700">{{ post.created_at }}</div>
+        <time class="block text-sm text-iron-grey-700" :datetime="post.created_at">
+            {{ formatDate(post.created_at) }}
+        </time>
     </li>
 </template>

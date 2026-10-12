@@ -45,6 +45,11 @@ supabase.auth.onAuthStateChange((event, session) => {
     notifyAll();
 });
 
+/**
+ *
+ * @param {{email: string, password: string}} data
+ * @returns {Promise<{id: string, email: string}>}
+ */
 export async function register({ email, password }) {
     const { data, error } = await supabase.auth.signUp({
         email,
@@ -67,6 +72,11 @@ export async function register({ email, password }) {
     };
 }
 
+/**
+ *
+ * @param {{email: string, password: string}} data
+ * @returns {Promise<{id: string, email: string}>}
+ */
 export async function login({ email, password }) {
     const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -88,6 +98,10 @@ export async function logout() {
     await supabase.auth.signOut();
 }
 
+/**
+ *
+ * @param {{display_name?: string|null, bio?: string|null}} data
+ */
 export async function updateAuthProfile(data) {
     try {
         await updateProfile(userData.id, data);
@@ -102,12 +116,20 @@ export async function updateAuthProfile(data) {
     }
 }
 
+/**
+ *
+ * @param {(user: {id: string|null, email: string|null, display_name: string|null, bio: string|null}) => void} callback
+ */
 export function subscribeToAuthChanges(callback) {
     observers.push(callback);
 
     notify(callback);
 }
 
+/**
+ *
+ * @param {(user: {id: string|null, email: string|null, display_name: string|null, bio: string|null}) => void} callback
+ */
 function notify(callback) {
     callback({ ...userData });
 }

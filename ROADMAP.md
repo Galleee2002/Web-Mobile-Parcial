@@ -41,7 +41,7 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 ## Componentes
 
 - `PageTitle.vue`: título de cada página (slot + clase `.page-title`). El docente lo llama `BaseH1` y la clase es `.h1`.
-- `PostCard.vue`: una publicación (autor, texto, fecha). Se usa en el feed y en el perfil. La raíz es un `<li>`. El autor es un `RouterLink` con `:to="'/usuarios/' + post.user_id"` (concatenación, como en el chat del docente). El `v-for` no lleva `:key`.
+- `PostCard.vue`: una publicación (autor, texto, fecha). Se usa en el feed y en el perfil. La raíz es un `<li>`. El autor es un `RouterLink` con `:to="'/usuarios/' + post.user_id"` (concatenación, como en el chat del docente). El `v-for` no lleva `:key`. La fecha se muestra con un método `formatDate(date)` que hace `new Date(date).toLocaleString('es-AR')`, adentro de `<time :datetime="post.created_at">` (**no visto en clase**, decidido con el usuario: el docente imprime `created_at` crudo, en formato ISO y hora UTC). `toLocaleString` la pasa a la hora local del navegador.
 - El formulario de publicar vive en `NewPost.vue`, igual que el del chat vive en la página. No hay `PostForm.vue`.
 - No se arman `BaseLoader` ni `LoadingContext`. La carga es el texto "Cargando..." del chat.
 
@@ -92,7 +92,7 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
 - [x] `UserProfile.vue`: `this.$route.params.id`, `getProfileById` y `getPostsByUser`. Sin `requiresAuth` ni realtime
 - [x] `Account.vue` (ver) y `EditAccount.vue` (editar `display_name` y `bio`). Ahí se crean `updateProfile` y `updateAuthProfile`. `.update()` ya está visto
 - [x] Mostrar errores en `Login.vue` y `Register.vue` (**no visto en clase**: el docente deja el `catch` vacío). Se guarda `errorMessage` en `data()`, el `catch` le pone un texto fijo en castellano (no el `error.message` de Supabase, que viene en inglés) y el template lo muestra con `<p v-if="errorMessage !== null" role="alert">`. `EditAccount.vue` hace lo mismo y además muestra "Cambios guardados." con `successMessage`. `role="alert"` es para que el lector de pantalla lea el mensaje apenas aparece
-- [ ] Pasada de accesibilidad, responsive y JSDoc. El nav con sesión (email + "Cerrar sesión") ya ocupa todo el ancho cerca de 545px: en celular hay que acomodarlo
+- [ ] Pasada de accesibilidad y responsive (el JSDoc ya está, ver "Recordatorio: JSDoc"). El nav con sesión (email + "Cerrar sesión") ya ocupa todo el ancho cerca de 545px: en celular hay que acomodarlo
 
 Notas de la prueba en el navegador:
 
@@ -119,4 +119,4 @@ Zip/rar `apellido-nombre` con el proyecto completo (incluida `supabase/migration
 
 ## Recordatorio: JSDoc
 
-- [ ] Se sacaron todos los bloques JSDoc de `posts.js`, `profiles.js` y `auth.js`. La consigna evalúa "documentación apropiada usando JSDoc", así que antes de entregar hay que volver a escribirlos en las funciones de `src/services/`, como el docente: primera línea vacía (` *`), `@param {tipo} nombre` y `@returns {tipo}` solo cuando la función devuelve algo.
+- [x] JSDoc de vuelta en `posts.js`, `profiles.js` y `auth.js`, como el docente: primera línea vacía (` *`), `@param {tipo} nombre` y `@returns {tipo}` solo cuando la función devuelve algo. Si la función desestructura (`{ email, password }`), el parámetro se documenta igual como `data` con el tipo del objeto entero. `subscribeToNewPosts` lleva `@returns {() => void} Función para cancelar la suscripción.`. `logout` y `notifyAll` no llevan JSDoc, igual que en el docente. `supabase.js` tampoco, porque no tiene funciones.
