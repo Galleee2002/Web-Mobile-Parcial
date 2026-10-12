@@ -36,13 +36,13 @@ export default {
     <template v-if="!loading">
         <PageTitle>Perfil de {{ profile.email }}</PageTitle>
 
-        <div class="p-4 mb-4 italic">{{ profile.bio || 'Sin especificar...' }}</div>
-
         <dl class="mb-4">
-            <dt class="m-0.5 font-bold">Email</dt>
-            <dd class="ms-4 mb-2">{{ profile.email }}</dd>
             <dt class="m-0.5 font-bold">Nombre</dt>
             <dd class="ms-4 mb-2">{{ profile.display_name || 'Sin especificar...' }}</dd>
+            <dt class="m-0.5 font-bold">Biografía</dt>
+            <dd class="ms-4 mb-2 italic">{{ profile.bio || 'Sin especificar...' }}</dd>
+            <dt class="m-0.5 font-bold">Email</dt>
+            <dd class="ms-4 mb-2">{{ profile.email }}</dd>
         </dl>
 
         <section>
