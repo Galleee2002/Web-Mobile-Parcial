@@ -120,6 +120,12 @@ Después de ingresar o registrarse, `this.$router.push('/')`. El docente manda a
     - El `textarea` lleva `rows="5"` (alto inicial de cinco líneas), `placeholder="Escribí tu publicación acá..."` y `resize-y` (solo se agranda hacia abajo). El borde sigue en `iron-grey-600`
     - Abajo, "Cancelar" a la izquierda y "Publicar" a la derecha (`flex justify-between`). "Cancelar" es un `RouterLink` a `/` con texto gris y sin fondo: solo navega al feed, no envía nada. "Publicar" es el `button type="submit"` con fondo `steel-blue-700`, igual que "Editar perfil"
     - De la imagen no se tomaron la cabecera con avatar y email, la barra de Imagen y Archivo ni el contador de caracteres
+- [x] Diseño de `/acceso` y `/registro` (**no visto en clase**, decidido con el usuario, a partir de una imagen de referencia). La lógica de `Login.vue` y `Register.vue` no cambia: solo el template y los iconos en `components`:
+    - Las dos páginas son la misma tarjeta blanca centrada (`max-w-md mx-auto`), un `<section>` con `rounded-2xl`, borde `iron-grey-100` y `shadow-lg`
+    - Arriba, el icono `Users` de Lucide en `steel-blue-700`, y el `<PageTitle>` centrado con un `div` `text-center` alrededor. `.page-title` no cambia
+    - Cada input lleva un icono adentro (`Mail` y `Lock`). El icono va en un `div relative` con el input, y se ubica con `absolute left-3 top-1/2 -translate-y-1/2`; el input deja lugar con `pl-11`. Los iconos tienen `aria-hidden="true"` porque el `<label>` ya dice qué campo es. El borde sigue en `iron-grey-600`, con fondo `iron-grey-50` y `placeholder`
+    - El botón ocupa todo el ancho (`w-full`), con fondo `steel-blue-800`. El link a la otra pantalla va centrado abajo
+    - De la imagen no se tomó el fondo con círculos: la página sigue en blanco
 
 Notas de la prueba en el navegador:
 
