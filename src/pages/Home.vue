@@ -32,17 +32,19 @@ export default {
 </script>
 
 <template>
-    <PageTitle>Inicio</PageTitle>
+    <div class="max-w-2xl mx-auto">
+        <PageTitle class="pt-4">Inicio</PageTitle>
 
-    <section>
-        <h2 class="sr-only">Publicaciones</h2>
+        <section>
+            <h2 class="sr-only">Publicaciones</h2>
 
-        <template v-if="!loading">
-            <p v-if="posts.length === 0">Todavía no hay publicaciones.</p>
-            <ol v-else class="flex flex-col gap-4">
-                <PostCard v-for="post in posts" :post="post" />
-            </ol>
-        </template>
-        <div v-else>Cargando...</div>
-    </section>
+            <template v-if="!loading">
+                <p v-if="posts.length === 0">Todavía no hay publicaciones.</p>
+                <ol v-else class="flex flex-col gap-4">
+                    <PostCard v-for="post in posts" :post="post" />
+                </ol>
+            </template>
+            <div v-else>Cargando...</div>
+        </section>
+    </div>
 </template>

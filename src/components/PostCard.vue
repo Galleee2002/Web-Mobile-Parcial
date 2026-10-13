@@ -1,6 +1,9 @@
 <script>
+import { Clock, User } from '@lucide/vue';
+
 export default {
     name: 'PostCard',
+    components: { Clock, User },
     props: {
         post: {
             type: Object,
@@ -17,16 +20,28 @@ export default {
 </script>
 
 <template>
-    <li class="p-4 rounded bg-frozen-water-100">
-        <div class="font-bold mb-1 wrap-break-word">
-            <RouterLink class="text-steel-blue-700 underline" :to="'/usuarios/' + post.user_id">
-                {{ post.email }}
-            </RouterLink>
-            publicó:
+    <li class="flex gap-4 p-5 bg-white rounded-xl border border-iron-grey-100 shadow-sm">
+        <div class="grid place-items-center size-10 shrink-0 rounded-full bg-steel-blue-100">
+            <User class="size-5 text-steel-blue-600" aria-hidden="true" />
         </div>
-        <div class="mb-1 wrap-break-word">{{ post.body }}</div>
-        <time class="block text-sm text-iron-grey-700" :datetime="post.created_at">
-            {{ formatDate(post.created_at) }}
-        </time>
+        <div class="min-w-0">
+            <div class="mb-1 wrap-break-word">
+                <RouterLink
+                    class="font-bold text-steel-blue-700 hover:underline"
+                    :to="'/usuarios/' + post.user_id"
+                >
+                    {{ post.email }}
+                </RouterLink>
+                publicó:
+            </div>
+            <div class="mb-2 wrap-break-word">{{ post.body }}</div>
+            <time
+                class="flex items-center gap-2 text-sm text-iron-grey-600"
+                :datetime="post.created_at"
+            >
+                <Clock class="size-4 shrink-0" aria-hidden="true" />
+                {{ formatDate(post.created_at) }}
+            </time>
+        </div>
     </li>
 </template>

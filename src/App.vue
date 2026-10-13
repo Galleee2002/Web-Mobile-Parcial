@@ -1,10 +1,10 @@
 <script>
-import { CircleFadingPlus, House, MessagesSquare, User } from '@lucide/vue';
+import { House, MessagesSquare, PlusCircle, User } from '@lucide/vue';
 import { logout, subscribeToAuthChanges } from './services/auth.js';
 
 export default {
     name: 'App',
-    components: { CircleFadingPlus, House, MessagesSquare, User },
+    components: { House, MessagesSquare, PlusCircle, User },
     data() {
         return {
             user: {
@@ -86,7 +86,7 @@ export default {
                                 title="Publicar"
                                 @click="closeMenu"
                             >
-                                <CircleFadingPlus class="size-6" aria-hidden="true" />
+                                <PlusCircle class="size-6" aria-hidden="true" />
                                 <span class="sr-only">Publicar</span>
                             </RouterLink>
                         </li>
